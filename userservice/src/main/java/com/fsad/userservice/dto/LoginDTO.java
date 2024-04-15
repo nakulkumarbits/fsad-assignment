@@ -1,7 +1,12 @@
 package com.fsad.userservice.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class LoginDTO {
+  @NotBlank(message = "username is mandatory")
   private String userName;
+
+  @NotBlank(message = "password is mandatory")
   private String password;
 
   public LoginDTO(String userName, String password) {
