@@ -1,7 +1,11 @@
 package com.fsad.userservice.entities;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -22,6 +26,15 @@ public class User {
 
   @Column(nullable = false)
   private String password;
+
+  @CreatedDate
+  private LocalDateTime createdDate;
+
+  @LastModifiedDate
+  private LocalDateTime modifiedDate;
+
+  @Version
+  private Long version;
 
   public Long getId() {
     return id;
@@ -69,5 +82,29 @@ public class User {
 
   public void setPassword(String password) {
     this.password = password;
+  }
+
+  public LocalDateTime getCreatedDate() {
+    return createdDate;
+  }
+
+  public void setCreatedDate(LocalDateTime createdDate) {
+    this.createdDate = createdDate;
+  }
+
+  public LocalDateTime getModifiedDate() {
+    return modifiedDate;
+  }
+
+  public void setModifiedDate(LocalDateTime modifiedDate) {
+    this.modifiedDate = modifiedDate;
+  }
+
+  public Long getVersion() {
+    return version;
+  }
+
+  public void setVersion(Long version) {
+    this.version = version;
   }
 }
