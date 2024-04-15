@@ -6,6 +6,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.StringJoiner;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
@@ -106,5 +107,20 @@ public class User {
 
   public void setVersion(Long version) {
     this.version = version;
+  }
+
+  @Override
+  public String toString() {
+    return new StringJoiner(", ", User.class.getSimpleName() + "[", "]")
+        .add("id=" + id)
+        .add("firstName='" + firstName + "'")
+        .add("lastName='" + lastName + "'")
+        .add("email='" + email + "'")
+        .add("userName='" + userName + "'")
+        .add("password='" + password + "'")
+        .add("createdDate=" + createdDate)
+        .add("modifiedDate=" + modifiedDate)
+        .add("version=" + version)
+        .toString();
   }
 }
