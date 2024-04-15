@@ -1,3 +1,9 @@
+**UserService**
+
+This service does following:
+
+Implement a secure user authentication system to allow users to register, log in, and manage their accounts.
+
 Pre-requisites
 
 - maven - 3.8.1
