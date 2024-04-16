@@ -29,11 +29,7 @@ public class TokenService {
   }
 
   public void invalidate(String token) {
-    Jws<Claims> claims = Jwts.parser()
-        .verifyWith(getSecretKey())
-        .build()
-        .parseSignedClaims(token);
-    Claims payload = claims.getPayload();
+    Claims payload = getPayload(token);
     String key = (String) payload.get("username");
     tokenStore.remove(key);
   }
@@ -57,7 +53,21 @@ public class TokenService {
         .compact();
   }
 
+  public boolean validate(String token) {
+    Claims payload = getPayload(token);
+    Date expiration = payload.getExpiration();
+    return !expiration.before(Date.from(Instant.now()));
+  }
+
   private SecretKey getSecretKey() {
     return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
+  }
+
+  private Claims getPayload(String token) {
+    Jws<Claims> claims = Jwts.parser()
+        .verifyWith(getSecretKey())
+        .build()
+        .parseSignedClaims(token);
+    return claims.getPayload();
   }
 }
