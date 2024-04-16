@@ -4,6 +4,7 @@ import com.fsad.userservice.dto.LoginDTO;
 import com.fsad.userservice.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ public class LoginController {
   private UserService userService;
 
   @PostMapping("/login")
-  public void login(@RequestBody @Valid LoginDTO loginDTO) {
-    userService.login(loginDTO.getUserName(), loginDTO.getPassword());
+  public ResponseEntity<String> login(@RequestBody @Valid LoginDTO loginDTO) {
+    return ResponseEntity.ok(userService.login(loginDTO.getUserName(), loginDTO.getPassword()));
   }
 }

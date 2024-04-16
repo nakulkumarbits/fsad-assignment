@@ -17,17 +17,26 @@ public class UserService {
   @Autowired
   private UserRepository userRepository;
 
+  @Autowired
+  private TokenService tokenService;
+
   public UserDTO register(User user) {
     User savedUser = userRepository.save(user);
     return UserConvertor.toDTO(savedUser);
   }
 
-  public void login(final String userName, final String password) {
+  public String login(final String userName, final String password) {
     Optional<User> optionalUser = userRepository.findByUserName(userName);
     if (optionalUser.isPresent()) {
       User user = optionalUser.get();
       if (user.getPassword().equals(password)) {
-
+        String existingToken = tokenService.tokenExistsForKey(user.getUserName());
+        if (existingToken != null) {
+          return existingToken;
+        }
+        String token = tokenService.createJWT(user.getUserName(), user.getEmail());
+        tokenService.storeToken(user.getUserName(), token);
+        return token;
       }
       throw new UnauthorizedException("Invalid username/password");
     }
