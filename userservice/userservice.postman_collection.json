@@ -1,0 +1,114 @@
+{
+	"info": {
+		"_postman_id": "10592897-38e0-408b-8638-6f757fabfd94",
+		"name": "userservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"nakulkumar\",\n    \"password\":\"dummypassword\",\n    \"firstName\":\"nakul\",\n    \"lastName\":\"kumar\",\n    \"email\":\"2023mt93202@wilp.bits-pilani.ac.in\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9000/register",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/login",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"userName\":\"nakulkumar\",\n    \"password\":\"dummypassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9000/login",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/token",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"token\":\"eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6IjI5ZDQzODc2ODI1ODQ3OGM4N2RiMjE3MTA1YmI0ZWEwIiwiaWF0IjoxNzEzMjY4Mzg2LCJleHAiOjE3MTMyNjg1MDZ9.NNsBlwp5mTXWmOianUaFMIlk3S4cKasJCtgbPTFXSj_aUPktRhFtK-W1JgJ2UcsOAgkpuuBHoLa2c-THcttMsg\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9000/token",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/logout",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6IjI5ZDQzODc2ODI1ODQ3OGM4N2RiMjE3MTA1YmI0ZWEwIiwiaWF0IjoxNzEzMjY4Mzg2LCJleHAiOjE3MTMyNjg1MDZ9.NNsBlwp5mTXWmOianUaFMIlk3S4cKasJCtgbPTFXSj_aUPktRhFtK-W1JgJ2UcsOAgkpuuBHoLa2c-THcttMsg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9000/logout",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"logout"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
