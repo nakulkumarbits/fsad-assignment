@@ -1,13 +1,16 @@
 package com.fsad.userservice.service;
 
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import java.time.Clock;
 import java.time.Instant;
+import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.HashMap;
@@ -29,13 +32,17 @@ public class TokenService {
   }
 
   public void invalidate(String token) {
-    Claims payload = getPayload(token);
-    String key = (String) payload.get("username");
-    tokenStore.remove(key);
+    try {
+      Claims payload = getPayload(token);
+      String key = (String) payload.get("username");
+      tokenStore.remove(key);
+    } catch (ExpiredJwtException ignored) {
+      // nothing to be done.
+    }
   }
 
   public String createJWT(String userName, String email) {
-    Date issuedAt = Date.from(Instant.now());
+    Date issuedAt = Date.from(Instant.now(Clock.system(ZoneId.systemDefault())));
     Date expiry = Date.from(issuedAt.toInstant().plus(2L, ChronoUnit.MINUTES));
     String id = UUID.randomUUID().toString().replace("-", "");
 
@@ -54,9 +61,17 @@ public class TokenService {
   }
 
   public boolean validate(String token) {
-    Claims payload = getPayload(token);
-    Date expiration = payload.getExpiration();
-    return !expiration.before(Date.from(Instant.now()));
+    try {
+      Claims payload = getPayload(token);
+      String username = (String) payload.get("username");
+      if (tokenExistsForKey(username) == null) {
+        return false;
+      }
+      Date expiration = payload.getExpiration();
+      return !expiration.before(Date.from(Instant.now()));
+    } catch (ExpiredJwtException ex) {
+      return false;
+    }
   }
 
   private SecretKey getSecretKey() {
