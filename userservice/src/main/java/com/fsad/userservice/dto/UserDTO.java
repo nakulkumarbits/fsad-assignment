@@ -8,6 +8,7 @@ public class UserDTO {
   private String email;
   private String userName;
   private String password;
+  private AddressDTO addressDTO;
 
   public String getFirstName() {
     return firstName;
@@ -49,6 +50,14 @@ public class UserDTO {
     this.password = password;
   }
 
+  public AddressDTO getAddressDTO() {
+    return addressDTO;
+  }
+
+  public void setAddressDTO(AddressDTO addressDTO) {
+    this.addressDTO = addressDTO;
+  }
+
   @Override
   public String toString() {
     return new StringJoiner(", ", UserDTO.class.getSimpleName() + "[", "]")
@@ -57,6 +66,7 @@ public class UserDTO {
         .add("email='" + email + "'")
         .add("userName='" + userName + "'")
         .add("password='" + password + "'")
+        .add("addressDTO=" + addressDTO)
         .toString();
   }
 }

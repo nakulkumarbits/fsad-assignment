@@ -28,6 +28,10 @@ public class User {
   @Column(nullable = false)
   private String password;
 
+  @OneToOne(cascade = CascadeType.ALL)
+  @JoinColumn(name = "address_id", referencedColumnName = "id")
+  private Address address;
+
   @CreatedDate
   private LocalDateTime createdDate;
 
@@ -85,6 +89,14 @@ public class User {
     this.password = password;
   }
 
+  public Address getAddress() {
+    return address;
+  }
+
+  public void setAddress(Address address) {
+    this.address = address;
+  }
+
   public LocalDateTime getCreatedDate() {
     return createdDate;
   }
@@ -118,6 +130,7 @@ public class User {
         .add("email='" + email + "'")
         .add("userName='" + userName + "'")
         .add("password='" + password + "'")
+        .add("address=" + address)
         .add("createdDate=" + createdDate)
         .add("modifiedDate=" + modifiedDate)
         .add("version=" + version)
