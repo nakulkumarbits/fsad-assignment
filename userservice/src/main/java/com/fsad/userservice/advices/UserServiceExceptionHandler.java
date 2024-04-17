@@ -4,6 +4,7 @@ import com.fsad.userservice.dto.ErrorResponse;
 import com.fsad.userservice.exceptions.AddressNotFoundException;
 import com.fsad.userservice.exceptions.UnauthorizedException;
 import com.fsad.userservice.exceptions.UserNotFoundException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,5 +38,11 @@ public class UserServiceExceptionHandler {
   @ExceptionHandler(AddressNotFoundException.class)
   public ResponseEntity<ErrorResponse> handleAddressNotFoundException(AddressNotFoundException ex) {
     return new ResponseEntity<>(new ErrorResponse("Address not found"), HttpStatus.NOT_FOUND);
+  }
+
+  @ResponseStatus(value = HttpStatus.UNAUTHORIZED, reason = "Invalid token")
+  @ExceptionHandler(MalformedJwtException.class)
+  public ResponseEntity<ErrorResponse> handleMalformedJwtException(MalformedJwtException ex) {
+    return new ResponseEntity<>(new ErrorResponse("Invalid token"), HttpStatus.UNAUTHORIZED);
   }
 }

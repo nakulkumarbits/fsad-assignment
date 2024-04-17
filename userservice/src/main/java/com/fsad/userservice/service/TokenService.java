@@ -5,6 +5,7 @@ import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import io.jsonwebtoken.security.SignatureException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -36,7 +37,7 @@ public class TokenService {
       Claims payload = getPayload(token);
       String key = (String) payload.get("username");
       tokenStore.remove(key);
-    } catch (ExpiredJwtException ignored) {
+    } catch (ExpiredJwtException | SignatureException ignored) {
       // nothing to be done.
     }
   }
@@ -69,7 +70,7 @@ public class TokenService {
       }
       Date expiration = payload.getExpiration();
       return !expiration.before(Date.from(Instant.now()));
-    } catch (ExpiredJwtException ex) {
+    } catch (ExpiredJwtException | SignatureException ex) {
       return false;
     }
   }
@@ -78,7 +79,7 @@ public class TokenService {
     return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
   }
 
-  private Claims getPayload(String token) {
+  private Claims getPayload(String token) throws SignatureException {
     Jws<Claims> claims = Jwts.parser()
         .verifyWith(getSecretKey())
         .build()
