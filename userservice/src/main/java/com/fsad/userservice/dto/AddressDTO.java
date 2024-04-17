@@ -8,6 +8,7 @@ public class AddressDTO {
   private String addressLine2;
   private String city;
   private String state;
+  private String pincode;
 
   public Long getId() {
     return id;
@@ -49,6 +50,14 @@ public class AddressDTO {
     this.state = state;
   }
 
+  public String getPincode() {
+    return pincode;
+  }
+
+  public void setPincode(String pincode) {
+    this.pincode = pincode;
+  }
+
   @Override
   public String toString() {
     return new StringJoiner(", ", AddressDTO.class.getSimpleName() + "[", "]")
@@ -57,6 +66,7 @@ public class AddressDTO {
         .add("addressLine2='" + addressLine2 + "'")
         .add("city='" + city + "'")
         .add("state='" + state + "'")
+        .add("pincode='" + pincode + "'")
         .toString();
   }
 }

@@ -13,6 +13,7 @@ public class AddressConvertor {
     address.setAddressLine2(addressDTO.getAddressLine2());
     address.setCity(addressDTO.getCity());
     address.setState(addressDTO.getState());
+    address.setPincode(addressDTO.getPincode());
     return address;
   }
 
@@ -26,6 +27,7 @@ public class AddressConvertor {
     addressDTO.setAddressLine2(address.getAddressLine2());
     addressDTO.setCity(address.getCity());
     addressDTO.setState(address.getState());
+    addressDTO.setPincode(address.getPincode());
     return addressDTO;
   }
 }

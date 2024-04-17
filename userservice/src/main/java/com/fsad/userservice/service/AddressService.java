@@ -35,6 +35,10 @@ public class AddressService {
     if (StringUtils.isNotBlank(addressDTO.getState()) && !address.getState().equals(addressDTO.getState())) {
       address.setState(addressDTO.getState());
     }
+    if (StringUtils.isNotBlank(addressDTO.getPincode()) && !address.getPincode().equals(addressDTO.getPincode())) {
+      address.setPincode(addressDTO.getPincode());
+    }
+
     Address savedAddress = addressRepository.save(address);
     return AddressConvertor.toDTO(savedAddress);
   }

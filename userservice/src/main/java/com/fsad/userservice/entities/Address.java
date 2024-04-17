@@ -21,6 +21,8 @@ public class Address {
   private String city;
   @Column(nullable = false)
   private String state;
+  @Column(nullable = false)
+  private String pincode;
   @OneToOne(mappedBy = "address")
   private User user;
   @CreatedDate
@@ -70,6 +72,14 @@ public class Address {
 
   public void setState(String state) {
     this.state = state;
+  }
+
+  public String getPincode() {
+    return pincode;
+  }
+
+  public void setPincode(String pincode) {
+    this.pincode = pincode;
   }
 
   public User getUser() {
