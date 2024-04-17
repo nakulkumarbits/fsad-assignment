@@ -21,6 +21,7 @@ public class AddressConvertor {
       return null;
     }
     AddressDTO addressDTO = new AddressDTO();
+    addressDTO.setId(address.getId());
     addressDTO.setAddressLine1(address.getAddressLine1());
     addressDTO.setAddressLine2(address.getAddressLine2());
     addressDTO.setCity(address.getCity());

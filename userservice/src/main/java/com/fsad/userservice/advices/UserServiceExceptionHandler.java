@@ -1,6 +1,7 @@
 package com.fsad.userservice.advices;
 
 import com.fsad.userservice.dto.ErrorResponse;
+import com.fsad.userservice.exceptions.AddressNotFoundException;
 import com.fsad.userservice.exceptions.UnauthorizedException;
 import com.fsad.userservice.exceptions.UserNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -30,5 +31,11 @@ public class UserServiceExceptionHandler {
   @ExceptionHandler(UnauthorizedException.class)
   public ResponseEntity<ErrorResponse> handleUnauthorizedException(UnauthorizedException ex) {
     return new ResponseEntity<>(new ErrorResponse("Username or password is incorrect"), HttpStatus.UNAUTHORIZED);
+  }
+
+  @ResponseStatus(value = HttpStatus.NOT_FOUND, reason = "Address not found")
+  @ExceptionHandler(AddressNotFoundException.class)
+  public ResponseEntity<ErrorResponse> handleAddressNotFoundException(AddressNotFoundException ex) {
+    return new ResponseEntity<>(new ErrorResponse("Address not found"), HttpStatus.NOT_FOUND);
   }
 }
