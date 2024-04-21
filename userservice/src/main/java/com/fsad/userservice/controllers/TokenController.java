@@ -10,11 +10,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class TokenController {
+public class TokenController implements UserController{
   @Autowired
   private TokenService tokenService;
 
-  @PostMapping("/token")
+  @PostMapping("/token/validate")
   public ResponseEntity<Void> validate(@RequestBody TokenDTO tokenDTO) {
     boolean isValid = tokenService.validate(tokenDTO.getToken());
     if (isValid) {

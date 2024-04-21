@@ -23,6 +23,7 @@ public class TokenService {
   public static final String ISSUER = "USERSERVICE";
   public static final String SECRET_KEY = "5313ea05b866ef3922983e3d0f0eee22698e0788f676b3bfa7bc48eb2561e467";
   private Map<String, String> tokenStore = new HashMap<>();
+  private final int MAX_TIMEOUT_IN_MINUTES = 10;
 
   public void storeToken(String key, String token) {
     tokenStore.put(key, token);
@@ -44,7 +45,7 @@ public class TokenService {
 
   public String createJWT(String userName, String email) {
     Date issuedAt = Date.from(Instant.now(Clock.system(ZoneId.systemDefault())));
-    Date expiry = Date.from(issuedAt.toInstant().plus(2L, ChronoUnit.MINUTES));
+    Date expiry = Date.from(issuedAt.toInstant().plus(MAX_TIMEOUT_IN_MINUTES, ChronoUnit.MINUTES));
     String id = UUID.randomUUID().toString().replace("-", "");
 
     Map<String, String> claims = new HashMap<>();
@@ -83,7 +84,7 @@ public class TokenService {
     Jws<Claims> claims = Jwts.parser()
         .verifyWith(getSecretKey())
         .build()
-        .parseSignedClaims(token);
+        .parseSignedClaims(token.replace("Bearer\s", ""));
     return claims.getPayload();
   }
 }
