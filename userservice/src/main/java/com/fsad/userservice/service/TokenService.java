@@ -6,6 +6,8 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
@@ -22,6 +24,7 @@ import java.util.UUID;
 public class TokenService {
   public static final String ISSUER = "USERSERVICE";
   public static final String SECRET_KEY = "5313ea05b866ef3922983e3d0f0eee22698e0788f676b3bfa7bc48eb2561e467";
+  private static final Logger log = LoggerFactory.getLogger(TokenService.class);
   private Map<String, String> tokenStore = new HashMap<>();
   private final int MAX_TIMEOUT_IN_MINUTES = 10;
 
@@ -81,10 +84,17 @@ public class TokenService {
   }
 
   private Claims getPayload(String token) throws SignatureException {
-    Jws<Claims> claims = Jwts.parser()
-        .verifyWith(getSecretKey())
-        .build()
-        .parseSignedClaims(token.replace("Bearer\s", ""));
-    return claims.getPayload();
+
+    try{
+      Jws<Claims> claims = Jwts.parser()
+              .verifyWith(getSecretKey())
+              .build()
+              .parseSignedClaims(token.replace("Bearer\s", ""));
+      return claims.getPayload();
+    }
+    catch (ExpiredJwtException ex){
+      log.error("Token expired ", ex);
+      throw ex;
+    }
   }
 }
