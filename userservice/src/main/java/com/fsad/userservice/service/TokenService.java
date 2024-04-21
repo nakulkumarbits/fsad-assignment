@@ -102,7 +102,7 @@ public class TokenService {
       Jws<Claims> claims = Jwts.parser()
               .verifyWith(getSecretKey())
               .build()
-              .parseSignedClaims(token.replace("Bearer\s", ""));
+              .parseSignedClaims(token);
       return claims.getPayload();
     }
     catch (ExpiredJwtException ex){
