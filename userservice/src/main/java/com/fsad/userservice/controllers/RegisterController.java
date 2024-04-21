@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class RegisterController implements UserController{
+public class RegisterController{
 
   private final Logger logger = LoggerFactory.getLogger(RegisterController.class);
 

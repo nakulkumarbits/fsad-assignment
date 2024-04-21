@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class AddressController implements UserController{
+public class AddressController{
   @Autowired
   private AddressService addressService;
 
