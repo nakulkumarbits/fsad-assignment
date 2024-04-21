@@ -16,7 +16,7 @@ public class LoginController implements UserController{
   private UserService userService;
 
   @CrossOrigin
-  @GetMapping("/login")
+  @PostMapping("/login")
   public ResponseEntity<String> login(@RequestBody @Valid LoginDTO loginDTO) {
     return ResponseEntity.ok(userService.login(loginDTO.getUserName(), loginDTO.getPassword()));
   }
