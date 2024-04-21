@@ -5,13 +5,13 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.StringJoiner;
 
 public class UserDTO {
-  @JsonProperty("firstname")
+  @JsonProperty("firstName")
   private String firstName;
-  @JsonProperty("lastname")
+  @JsonProperty("lastName")
   private String lastName;
   @JsonProperty("email")
   private String email;
-  @JsonProperty("username")
+  @JsonProperty("userName")
   private String userName;
   @JsonProperty("password")
   private String password;

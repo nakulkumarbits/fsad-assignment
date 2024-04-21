@@ -1,5 +1,7 @@
 package com.fsad.userservice.service;
 
+import com.fsad.userservice.entities.User;
+import com.fsad.userservice.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
@@ -15,18 +17,20 @@ import java.time.Clock;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 public class TokenService {
   public static final String ISSUER = "USERSERVICE";
   public static final String SECRET_KEY = "5313ea05b866ef3922983e3d0f0eee22698e0788f676b3bfa7bc48eb2561e467";
   private static final Logger log = LoggerFactory.getLogger(TokenService.class);
+  private final UserRepository userRepository;
   private Map<String, String> tokenStore = new HashMap<>();
   private final int MAX_TIMEOUT_IN_MINUTES = 10;
+
+  public TokenService(UserRepository userRepository) {
+    this.userRepository = userRepository;
+  }
 
   public void storeToken(String key, String token) {
     tokenStore.put(key, token);
@@ -65,17 +69,26 @@ public class TokenService {
         .compact();
   }
 
-  public boolean validate(String token) {
+  public Long validate(String token) {
     try {
       Claims payload = getPayload(token);
       String username = (String) payload.get("username");
       if (tokenExistsForKey(username) == null) {
-        return false;
+        return 0L;
       }
       Date expiration = payload.getExpiration();
-      return !expiration.before(Date.from(Instant.now()));
+      if(expiration.after(Date.from(Instant.now())))
+      {
+        Optional<User> optionalUser = userRepository.findByUserName(payload.get("username").toString());
+        return optionalUser.map(User::getId).orElse(null);
+      }
+      else{
+        invalidate(token);
+        return 0L;
+      }
     } catch (ExpiredJwtException | SignatureException ex) {
-      return false;
+      invalidate(token);
+      return 0L;
     }
   }
 
