@@ -12,13 +12,14 @@ public class TokenController implements UserController{
   @Autowired
   private TokenService tokenService;
 
-  @GetMapping("/token/validate")
-  public ResponseEntity<Void> validate(@RequestBody TokenDTO tokenDTO) {
-    boolean isValid = tokenService.validate(tokenDTO.getToken()) != 0;
+  @PostMapping("/token/validate")
+  public ResponseEntity<Object> validate(@RequestBody TokenDTO tokenDTO) {
+    Long userID = tokenService.validate(tokenDTO.getToken());
+    boolean isValid = userID != 0;
     if (isValid) {
-      return new ResponseEntity<>(HttpStatus.OK);
+      return new ResponseEntity<>(userID, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
     }
   }
 }
