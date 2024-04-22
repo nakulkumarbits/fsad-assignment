@@ -1,5 +1,5 @@
 import React from 'react'
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function NavBar(props) {
 
@@ -23,11 +23,14 @@ export default function NavBar(props) {
         <li className="nav-item">
           <a className="nav-link active" aria-current="page" href="/">Home</a>
         </li>
+        {
+          localStorage.getItem("token") ? 
+          (<li className="nav-item">
+            <a className="nav-link" href="/userprofile">User Profile</a>
+          </li>) : ('')
+        }
         <li className="nav-item">
-          <a className="nav-link" href="/">User Profile</a>
-        </li>
-        <li className="nav-item">
-          <a className="nav-link" href="/">About</a>
+          <a className="nav-link" href="/about">About</a>
         </li>
       </ul>
       {/* <button type="button" className={`btn btn-secondary ${localStorage.getItem("token") ? '' : 'hidden'}`} onClick={handleLogout}>Logout</button> */}

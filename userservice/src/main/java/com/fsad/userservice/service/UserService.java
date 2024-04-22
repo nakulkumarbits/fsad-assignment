@@ -31,7 +31,7 @@ public class UserService {
       User user = optionalUser.get();
       if (user.getPassword().equals(password)) {
         String existingToken = tokenService.tokenExistsForKey(user.getUserName());
-        if (existingToken != null) {
+        if (existingToken != null && tokenService.validate(existingToken)) {
           return existingToken;
         }
         String token = tokenService.createJWT(user.getUserName(), user.getEmail());
@@ -39,6 +39,14 @@ public class UserService {
         return token;
       }
       throw new UnauthorizedException("Invalid username/password");
+    }
+    throw new UserNotFoundException("User not found : " + userName);
+  }
+
+  public UserDTO getUserDetails(String userName) {
+    Optional<User> optionalUser = userRepository.findByUserName(userName);
+    if (optionalUser.isPresent()) {
+      return UserConvertor.toDTO(optionalUser.get());
     }
     throw new UserNotFoundException("User not found : " + userName);
   }

@@ -8,6 +8,7 @@ import Alert from './components/Alert';
 // import Search from './components/Search';
 import Home from './components/Home';
 import About from './components/About';
+import UserProfile from './components/UserProfile';
 
 function App() {
 
@@ -50,6 +51,7 @@ function App() {
                 path="/"
                 element={<Home showAlert={showAlert} />}
               ></Route>
+              <Route exact path="/userprofile" element={<UserProfile />}></Route>
               <Route exact path="/about" element={<About />}></Route>
               <Route
                 exact

@@ -34,6 +34,7 @@ export default function LoginRegister(props) {
     })
     .then(response => {
       if(response.ok) {
+        localStorage.setItem("username", username);
         console.log('Login successful');
         props.showAlert('Login successful', "success");
         return response.text();
@@ -50,6 +51,7 @@ export default function LoginRegister(props) {
     .then(res => {
       if(res === 'error') {
         console.log('Error in login');
+        localStorage.removeItem("username");
         navigate("/login");
       } else {
         console.log('response : ', res);

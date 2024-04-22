@@ -77,7 +77,7 @@ public class TokenService {
         return 0L;
       }
       Date expiration = payload.getExpiration();
-      if(expiration.after(Date.from(Instant.now())))
+      if(expiration.after(Date.from(Instant.now(Clock.system(ZoneId.systemDefault())))))
       {
         Optional<User> optionalUser = userRepository.findByUserName(payload.get("username").toString());
         return optionalUser.map(User::getId).orElse(null);
@@ -90,6 +90,11 @@ public class TokenService {
       invalidate(token);
       return 0L;
     }
+  }
+
+  public String getUserName(String token) {
+    Claims payload = getPayload(token);
+    return (String) payload.get("username");
   }
 
   private SecretKey getSecretKey() {
