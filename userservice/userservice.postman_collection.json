@@ -36,10 +36,102 @@
 			"name": "/login",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": " */*",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Encoding",
+						"value": " gzip, deflate, br, zstd",
+						"type": "text"
+					},
+					{
+						"key": "Accept-Language",
+						"value": " en-GB,en-US;q=0.9,en;q=0.8",
+						"type": "text"
+					},
+					{
+						"key": "Connection",
+						"value": " keep-alive",
+						"type": "text"
+					},
+					{
+						"key": "Content-Length",
+						"value": " 500",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": " text/plain;charset=UTF-8",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Host",
+						"value": " localhost:9000",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Origin",
+						"value": " http://localhost:3000",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Referer",
+						"value": " http://localhost:3000/",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Sec-Fetch-Dest",
+						"value": " empty",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Sec-Fetch-Mode",
+						"value": " no-cors",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "Sec-Fetch-Site",
+						"value": " same-site",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "User-Agent",
+						"value": " Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/123.0.0.0 Safari/537.36",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "sec-ch-ua",
+						"value": " \"Google Chrome\";v=\"123\", \"Not:A-Brand\";v=\"8\", \"Chromium\";v=\"123\"",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "sec-ch-ua-mobile",
+						"value": " ?0",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "sec-ch-ua-platform",
+						"value": " \"macOS\"",
+						"type": "text",
+						"disabled": true
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\":\"nakulkumar\",\n    \"password\":\"dummypassword\"\n}",
+					"raw": "{\n    \"username\":\"nakulkumar\",\n    \"password\":\"dummypassword\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -133,6 +225,32 @@
 					"path": [
 						"address",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/userprofile/{username}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6ImI2MjNkMjlmODkxMzRkMjk4YzkxY2Q2YjMyZmM2MDA5IiwiaWF0IjoxNzEzNzg3NTgwLCJleHAiOjE3MTM3ODgxODB9.IHW5q2oBvoDKEjOlxAHVPRHv_1K2ktB5xEUqtS0fX7GyA0nEGVyBRHI-BxSz8Nzm5Kp4pHfIWuimelPhyKddGA",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9000/userprofile/nakulkumar",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"userprofile",
+						"nakulkumar"
 					]
 				}
 			},

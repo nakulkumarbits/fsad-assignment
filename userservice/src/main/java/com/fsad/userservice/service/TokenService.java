@@ -44,7 +44,7 @@ public class TokenService {
 
   public String createJWT(String userName, String email) {
     Date issuedAt = Date.from(Instant.now(Clock.system(ZoneId.systemDefault())));
-    Date expiry = Date.from(issuedAt.toInstant().plus(2L, ChronoUnit.MINUTES));
+    Date expiry = Date.from(issuedAt.toInstant().plus(10L, ChronoUnit.MINUTES));
     String id = UUID.randomUUID().toString().replace("-", "");
 
     Map<String, String> claims = new HashMap<>();
@@ -69,10 +69,15 @@ public class TokenService {
         return false;
       }
       Date expiration = payload.getExpiration();
-      return !expiration.before(Date.from(Instant.now()));
+      return !expiration.before(Date.from(Instant.now(Clock.system(ZoneId.systemDefault()))));
     } catch (ExpiredJwtException | SignatureException ex) {
       return false;
     }
+  }
+
+  public String getUserName(String token) {
+    Claims payload = getPayload(token);
+    return (String) payload.get("username");
   }
 
   private SecretKey getSecretKey() {
