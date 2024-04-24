@@ -13,7 +13,6 @@ import UserProfile from './components/UserProfile';
 function App() {
 
   const[alert, setAlert] = useState(null); 
-
   const [token, setToken] = useState('');
 
   const showAlert = (message, type) => {
@@ -26,21 +25,8 @@ function App() {
     }, 1500);
   };
 
-  // let content;
-  // if (token) {
-  //   content = <Search showAlert={showAlert}/>  
-  // } else {
-  //   content = <LoginRegister showAlert={showAlert} setToken={setToken}/>
-  // }
-
   return (
     <>    
-      {/* <NavBar token={token}/> */}
-      {/* <Alert alert={alert}/> */}
-      {/* {content} */}
-      {/* <Search showAlert={showAlert}/>   */}
-      {/* <LoginRegister showAlert={showAlert} setToken={setToken}/> */}
-
         <Router>
           <NavBar token={token}/> 
           <Alert alert={alert} />
