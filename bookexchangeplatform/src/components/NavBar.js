@@ -29,6 +29,12 @@ export default function NavBar(props) {
                 <a className="nav-link" href="/userprofile">User Profile</a>
               </li>) : ('')
             }
+            {
+              localStorage.getItem("token") ? 
+              (<li className="nav-item">
+                <a className="nav-link" href="/books">Books</a>
+              </li>) : ('')
+            }
             <li className="nav-item">
               <a className="nav-link" href="/about">About</a>
             </li>

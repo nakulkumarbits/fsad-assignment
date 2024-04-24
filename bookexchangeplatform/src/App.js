@@ -9,6 +9,7 @@ import Alert from './components/Alert';
 import Home from './components/Home';
 import About from './components/About';
 import UserProfile from './components/UserProfile';
+import Books from './components/Books';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
                 element={<Home showAlert={showAlert} />}
               ></Route>
               <Route exact path="/userprofile" element={<UserProfile showAlert={showAlert} />}></Route>
+              <Route exact path='/books' element={<Books />}></Route>
               <Route exact path="/about" element={<About />}></Route>
               <Route
                 exact
