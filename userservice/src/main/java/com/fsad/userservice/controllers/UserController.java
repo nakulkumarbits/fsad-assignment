@@ -21,7 +21,7 @@ public class UserController {
   private UserService userService;
 
   @CrossOrigin
-  @GetMapping("/userprofile/{username}")
+  @GetMapping("/users/{username}")
   public ResponseEntity<UserDTO> getUserProfile(@RequestHeader("Authorization") String token,
                                                 @PathVariable("username") String userName) {
     // Auth token should be valid and should be used to access same user's profile.

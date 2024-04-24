@@ -6,7 +6,7 @@ export default function UserProfile(props) {
     const [address, setAddress] = useState([])
 
     const loggedInUsername = localStorage.getItem("username");
-    const userprofileUrl = `http://localhost:9000/userprofile/${loggedInUsername}`;
+    const userprofileUrl = `http://localhost:9000/users/${loggedInUsername}`;
 
     let navigate = useNavigate();
     const count = useRef(0);
