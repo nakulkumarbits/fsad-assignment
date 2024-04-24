@@ -1,7 +1,7 @@
 import React, { useEffect, useState,useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
-export default function UserProfile() {
+export default function UserProfile(props) {
     const [user, setUser] = useState([])
     const [address, setAddress] = useState([])
 
@@ -105,6 +105,8 @@ export default function UserProfile() {
                 // console.log('user profile : ', response);
                 setAddress(response.addressDTO);
                 setUser(response);
+                props.showAlert('Profile updated successfully!!', "success");
+                toggleForm();
             }
         });
     };

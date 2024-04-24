@@ -37,7 +37,7 @@ function App() {
                 path="/"
                 element={<Home showAlert={showAlert} />}
               ></Route>
-              <Route exact path="/userprofile" element={<UserProfile />}></Route>
+              <Route exact path="/userprofile" element={<UserProfile showAlert={showAlert} />}></Route>
               <Route exact path="/about" element={<About />}></Route>
               <Route
                 exact
