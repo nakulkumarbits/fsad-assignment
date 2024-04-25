@@ -4,8 +4,6 @@ public enum OrderStatus {
 
     AWAITING_OWNER_RESPONSE,
 
-    AWAITING_RECIPIENT_RESPONSE,
-
     INITIATE_DELIVERY,
 
     DELIVERY_IN_TRANSIT,
@@ -16,5 +14,7 @@ public enum OrderStatus {
 
     RETURN_IN_TRANSIT,
 
-    RETURNED
+    RETURNED,
+
+    REQUEST_REJECTED
 }

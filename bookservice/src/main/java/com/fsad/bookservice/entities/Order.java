@@ -19,7 +19,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @EntityListeners({AuditingEntityListener.class})
 @ToString
-public class OrderHistory {
+public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -55,15 +55,4 @@ public class OrderHistory {
     @Column(nullable = false)
     @LastModifiedDate
     private LocalDateTime modifiedTime;
-
-    public OrderHistory(Long ownerID, long ownerBookID, Long recipientID, long recipientBookID, Action action, int duration, DeliveryMode deliveryMode) {
-        this.ownerID = ownerID;
-        this.ownerBookID = ownerBookID;
-        this.recipientID = recipientID;
-        this.recipientBookID = recipientBookID;
-        this.action = action;
-        this.orderStatus = OrderStatus.AWAITING_OWNER_RESPONSE;
-        this.duration = duration;
-        this.deliveryMode = deliveryMode;
-    }
 }
