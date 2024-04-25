@@ -12,9 +12,10 @@ import java.util.StringJoiner;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Setter
 @Getter
+@Setter
 public class User {
+
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;

@@ -23,7 +23,6 @@ public class UserConvertor {
       return null;
     }
     UserDTO userDTO = new UserDTO();
-    userDTO.setId(user.getId());
     userDTO.setFirstName(user.getFirstName());
     userDTO.setLastName(user.getLastName());
     userDTO.setUserName(user.getUserName());

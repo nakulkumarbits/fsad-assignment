@@ -9,14 +9,13 @@ import java.util.StringJoiner;
 @Setter
 @Getter
 public class UserDTO {
-  private Long id;
   @JsonProperty("firstName")
   private String firstName;
   @JsonProperty("lastName")
   private String lastName;
   @JsonProperty("email")
   private String email;
-  @JsonProperty("username")
+  @JsonProperty("userName")
   private String userName;
   @JsonProperty("password")
   private String password;
@@ -25,7 +24,6 @@ public class UserDTO {
   @Override
   public String toString() {
     return new StringJoiner(", ", UserDTO.class.getSimpleName() + "[", "]")
-        .add("id=" + id)
         .add("firstName='" + firstName + "'")
         .add("lastName='" + lastName + "'")
         .add("email='" + email + "'")

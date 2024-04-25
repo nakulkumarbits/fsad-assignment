@@ -32,7 +32,7 @@ public class UserService {
       User user = optionalUser.get();
       if (user.getPassword().equals(password)) {
         String existingToken = tokenService.tokenExistsForKey(user.getUserName());
-        if (existingToken != null && tokenService.validate(existingToken)) {
+        if (existingToken != null && tokenService.validate(existingToken)!=0) {
           return existingToken;
         }
         String token = tokenService.createJWT(user.getUserName(), user.getEmail());

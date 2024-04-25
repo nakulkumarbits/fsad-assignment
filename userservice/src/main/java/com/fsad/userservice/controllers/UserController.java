@@ -25,7 +25,7 @@ public class UserController {
   public ResponseEntity<UserDTO> getUserProfile(@RequestHeader("Authorization") String token,
                                                 @PathVariable("username") String userName) {
     // Auth token should be valid and should be used to access same user's profile.
-    if (StringUtils.isNotBlank(token) && tokenService.validate(token) && tokenService.getUserName(token).equals(userName)) {
+    if (StringUtils.isNotBlank(token) && tokenService.validate(token)!=0 && tokenService.getUserName(token).equals(userName)) {
       return new ResponseEntity<>(userService.getUserDetails(userName), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

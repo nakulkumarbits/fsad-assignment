@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class AddressController {
+public class AddressController{
   @Autowired
   private AddressService addressService;
 
@@ -22,7 +22,7 @@ public class AddressController {
   public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long addressId,
                                                   @RequestBody AddressDTO addressDTO,
                                                   @RequestHeader("Authorization") String token) {
-    if (StringUtils.isNotBlank(token) && tokenService.validate(token)) {
+    if (StringUtils.isNotBlank(token) && tokenService.validate(token) != 0) {
       return new ResponseEntity<>(addressService.updateAddress(addressId, addressDTO), HttpStatus.OK);
     } else {
       throw new UnauthorizedException("Auth header missing");

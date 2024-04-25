@@ -5,22 +5,21 @@ import com.fsad.userservice.service.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TokenController {
+public class TokenController{
   @Autowired
   private TokenService tokenService;
 
-  @PostMapping("/token")
-  public ResponseEntity<Void> validate(@RequestBody TokenDTO tokenDTO) {
-    boolean isValid = tokenService.validate(tokenDTO.getToken());
+  @PostMapping("/token/validate")
+  public ResponseEntity<Object> validate(@RequestBody TokenDTO tokenDTO) {
+    Long userID = tokenService.validate(tokenDTO.getToken());
+    boolean isValid = userID != 0;
     if (isValid) {
-      return new ResponseEntity<>(HttpStatus.OK);
+      return new ResponseEntity<>(userID, HttpStatus.OK);
     } else {
-      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+      return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
     }
   }
 }
