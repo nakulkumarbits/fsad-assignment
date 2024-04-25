@@ -231,25 +231,59 @@
 			"response": []
 		},
 		{
-			"name": "/userprofile/{username}",
+			"name": "/users/{username}",
 			"request": {
 				"method": "GET",
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6ImI2MjNkMjlmODkxMzRkMjk4YzkxY2Q2YjMyZmM2MDA5IiwiaWF0IjoxNzEzNzg3NTgwLCJleHAiOjE3MTM3ODgxODB9.IHW5q2oBvoDKEjOlxAHVPRHv_1K2ktB5xEUqtS0fX7GyA0nEGVyBRHI-BxSz8Nzm5Kp4pHfIWuimelPhyKddGA",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6IjljYWE4N2M5YTAwNDRkNTNiNDllODExZTIwMGEzMDdlIiwiaWF0IjoxNzEzOTkxMDUwLCJleHAiOjE3MTM5OTE2NTB9._aVcW8nz9lvS8AvLZSAlhjQmeWVYIp96fZBujfyHMaeWmVp7avk2IFZQmrg93YAIw5lTqGp1Z5R66ucvDM4jSA",
 						"type": "text"
 					}
 				],
 				"url": {
-					"raw": "http://localhost:9000/userprofile/nakulkumar",
+					"raw": "http://localhost:9000/users/nakulkumar",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "9000",
 					"path": [
-						"userprofile",
+						"users",
+						"nakulkumar"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/users/{username}",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6ImYwNmZmZDM3MTJlMDRlY2U5ZDliOTdiZGI2MGMxNTY2IiwiaWF0IjoxNzEzOTkwOTM1LCJleHAiOjE3MTM5OTE1MzV9.HmrkkHZsxhp6LMV_Dkm1nZJMGCgpJ7LPlirj0nz3Aeg7ELgTuOKrPmabWvhtPih0VpkS3clpulz5fzkC09QGpA",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 1,\n    \"addressDTO\": {\n        \"id\": 1,\n        \"addressLine1\": \"12/B Galaxy apartments\",\n        \"addressLine2\": \"1st floor\",\n        \"city\": \"New Delhi\",\n        \"state\": \"Delhi\",\n        \"pincode\": \"110062\"\n    },\n    \"firstName\": \"nakul\",\n    \"lastName\": \"kumar\",\n    \"email\": \"2023mt93202@wilp.bits-pilani.ac.in\",\n    \"username\": \"nakulkumar\",\n    \"password\": \"dummypassword\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:9000/users/nakulkumar",
+					"host": [
+						"localhost"
+					],
+					"port": "9000",
+					"path": [
+						"users",
 						"nakulkumar"
 					]
 				}

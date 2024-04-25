@@ -9,11 +9,11 @@ import Alert from './components/Alert';
 import Home from './components/Home';
 import About from './components/About';
 import UserProfile from './components/UserProfile';
+import Books from './components/Books';
 
 function App() {
 
   const[alert, setAlert] = useState(null); 
-
   const [token, setToken] = useState('');
 
   const showAlert = (message, type) => {
@@ -26,21 +26,8 @@ function App() {
     }, 1500);
   };
 
-  // let content;
-  // if (token) {
-  //   content = <Search showAlert={showAlert}/>  
-  // } else {
-  //   content = <LoginRegister showAlert={showAlert} setToken={setToken}/>
-  // }
-
   return (
     <>    
-      {/* <NavBar token={token}/> */}
-      {/* <Alert alert={alert}/> */}
-      {/* {content} */}
-      {/* <Search showAlert={showAlert}/>   */}
-      {/* <LoginRegister showAlert={showAlert} setToken={setToken}/> */}
-
         <Router>
           <NavBar token={token}/> 
           <Alert alert={alert} />
@@ -51,7 +38,8 @@ function App() {
                 path="/"
                 element={<Home showAlert={showAlert} />}
               ></Route>
-              <Route exact path="/userprofile" element={<UserProfile />}></Route>
+              <Route exact path="/userprofile" element={<UserProfile showAlert={showAlert} />}></Route>
+              <Route exact path='/books' element={<Books />}></Route>
               <Route exact path="/about" element={<About />}></Route>
               <Route
                 exact

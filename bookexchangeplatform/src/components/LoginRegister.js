@@ -23,8 +23,6 @@ export default function LoginRegister(props) {
       password
     };
 
-    // let navigate = useNavigate();
-
     fetch('http://localhost:9000/login', {
       method: 'POST',
       headers: {
@@ -82,7 +80,7 @@ export default function LoginRegister(props) {
       }
     };
 
-    console.log(requestBody);
+    console.log('register body : ',requestBody);
 
     fetch('http://localhost:9000/register', {
       method: 'POST',
