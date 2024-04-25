@@ -18,7 +18,6 @@ public class SearchService {
     String genre = allParams.get("genre");
     String author = allParams.get("author");
     String title = allParams.get("title");
-    String location = allParams.get("location");
     bookRepository.findByGenreAndAuthorAndTitle(genre, author, title);
     return null;
   }

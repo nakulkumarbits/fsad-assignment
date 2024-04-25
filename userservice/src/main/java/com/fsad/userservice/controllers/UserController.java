@@ -37,7 +37,7 @@ public class UserController {
   public ResponseEntity<UserDTO> updateUser(@RequestHeader("Authorization") String token,
                                             @PathVariable("username") String userName,
                                             @RequestBody @Valid UserDTO userDTO) {
-    if (StringUtils.isNotBlank(token) && tokenService.validate(token) && tokenService.getUserName(token).equals(userName)) {
+    if (StringUtils.isNotBlank(token) && tokenService.validate(token) != 0 && tokenService.getUserName(token).equals(userName)) {
       return new ResponseEntity<>(userService.updateUser(userName, userDTO), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
