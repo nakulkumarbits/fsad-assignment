@@ -50,6 +50,7 @@ export default function LoginRegister(props) {
       if(res === 'error') {
         console.log('Error in login');
         localStorage.removeItem("username");
+        localStorage.removeItem("token");
         navigate("/login");
       } else {
         console.log('response : ', res);

@@ -36,6 +36,7 @@ export default function Books(props) {
             }).then(response=> {
                 if(response === 'error') {
                     console.log('Error in loading books!');
+                    localStorage.removeItem("token");
                     navigate("/login");
                 } else {
                     console.log('setting books : ', response);
@@ -128,6 +129,7 @@ export default function Books(props) {
                 setReload(true);
             } else {
                 console.log('deletion failed with response : ', response);
+                localStorage.removeItem("token");
                 navigate("/login");
             }
         });
