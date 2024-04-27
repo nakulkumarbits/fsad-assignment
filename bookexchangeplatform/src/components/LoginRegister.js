@@ -35,7 +35,7 @@ export default function LoginRegister(props) {
         localStorage.setItem("username", username);
         console.log('Login successful');
         props.showAlert('Login successful', "success");
-        return response.text();
+        return response.json();
       } else if(response.status >=400 && response.status < 500){
         props.showAlert('Username/Password is incorrect', "danger");
         console.log('Login Failed', response);
@@ -54,7 +54,7 @@ export default function LoginRegister(props) {
       } else {
         console.log('response : ', res);
         props.setToken(res);
-        localStorage.setItem("token", res);
+        localStorage.setItem("token", res.token);
         navigate("/");
       }
     })

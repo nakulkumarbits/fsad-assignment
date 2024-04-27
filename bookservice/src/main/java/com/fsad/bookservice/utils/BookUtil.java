@@ -15,38 +15,31 @@ import java.util.Objects;
 @Component
 public class BookUtil {
 
-    RestTemplate restTemplate;
+  RestTemplate restTemplate;
 
-    String validateURL = "http://localhost:9000/users/token/validate";
+  private static final String TOKEN_VALIDATE_URL = "http://localhost:9000/token/validate";
 
-    public ResponseEntity<Long> validate(String token)
-    {
-        restTemplate = new RestTemplateBuilder()
-                .setReadTimeout(Duration.ofMinutes(2L))
-                .build();
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
+  public ResponseEntity<Long> validateToken(String token) {
+    restTemplate = new RestTemplateBuilder()
+        .setReadTimeout(Duration.ofMinutes(2L))
+        .build();
+    HttpHeaders headers = new HttpHeaders();
+    headers.setContentType(MediaType.APPLICATION_JSON);
 
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("token", token);
-        HttpEntity<String> request = new HttpEntity<>(jsonObject.toString(), headers);
-        try
-        {
-            ResponseEntity<String> response = restTemplate.postForEntity(validateURL, request, String.class);
-
-            if(response.getStatusCode().equals(HttpStatus.OK))
-            {
-                return new ResponseEntity<>(Long.parseLong(Objects.requireNonNull(response.getBody())), HttpStatus.OK);
-            }
-        }
-        catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc)
-        {
-            return new ResponseEntity<>(0L, httpClientOrServerExc.getStatusCode());
-        }
-        catch (RestClientException | NumberFormatException e ) {
-            return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
-        }
-
-        return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
+    JSONObject jsonObject = new JSONObject();
+    jsonObject.put("token", token);
+    HttpEntity<String> request = new HttpEntity<>(jsonObject.toString(), headers);
+    try {
+      ResponseEntity<String> response = restTemplate.postForEntity(TOKEN_VALIDATE_URL, request, String.class);
+      if (response.getStatusCode().value() == HttpStatus.OK.value()) {
+        return new ResponseEntity<>(Long.parseLong(Objects.requireNonNull(response.getBody())), HttpStatus.OK);
+      }
+    } catch (HttpClientErrorException | HttpServerErrorException httpClientOrServerExc) {
+      return new ResponseEntity<>(0L, httpClientOrServerExc.getStatusCode());
+    } catch (RestClientException | NumberFormatException e) {
+      return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
     }
+
+    return new ResponseEntity<>(0L, HttpStatus.UNAUTHORIZED);
+  }
 }

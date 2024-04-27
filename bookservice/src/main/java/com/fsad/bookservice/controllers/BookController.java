@@ -13,7 +13,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
@@ -28,55 +29,58 @@ import static com.fsad.bookservice.enums.Action.EXCHANGE;
 public class BookController {
 
   @Autowired
-  BookRepository bookRepository;
+  private BookRepository bookRepository;
 
   @Autowired
-  OrderHistoryRepository orderHistoryRepository;
+  private OrderHistoryRepository orderHistoryRepository;
 
   @Autowired
-  BookUtil bookUtil;
+  private BookUtil bookUtil;
 
   @Autowired
-  Patcher patcher;
+  private Patcher patcher;
 
   private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
-  @PostMapping("/add")
-  public ResponseEntity<List<BookDTO>> addBook(@RequestBody List<BookDTO> bookDTOS,
-                                            @RequestHeader("Authorization") String token) {
-    try{
-      ResponseEntity<Long> response = bookUtil.validate(token);
-      if(response.getStatusCode() == HttpStatus.OK)
-      {
-        List<Book> books = new ArrayList<>();
-        bookDTOS.forEach(bookDTO -> {
-          bookDTO.setUserID(response.getBody());
-          books.add(BookConvertor.toEntity(bookDTO));
-        });
-        List<Book> createdBooks = bookRepository.saveAll(books);
+  @CrossOrigin
+  @PostMapping("/books")
+  public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO,
+                                          @RequestHeader("Authorization") String token) {
+    try {
+      ResponseEntity<Long> response = bookUtil.validateToken(token);
+      if (response.getStatusCode() == HttpStatus.OK) {
+//        List<Book> books = new ArrayList<>();
+//        bookDTOS.forEach(bookDTO -> {
+//          bookDTO.setUserID(response.getBody());
+//          books.add(BookConvertor.toEntity(bookDTO));
+//        });
+        bookDTO.setUserID(response.getBody());
+        Book book = BookConvertor.toEntity(bookDTO);
 
-        List<BookDTO> createdBookDTOS = new ArrayList<>();
-        createdBooks.forEach(book -> createdBookDTOS.add(BookConvertor.toDTO(book)));
+//        List<Book> createdBooks = bookRepository.saveAll(books);
+        Book savedBook = bookRepository.save(book);
 
-        return new ResponseEntity<>(createdBookDTOS, HttpStatus.OK);
+//        List<BookDTO> createdBookDTOS = new ArrayList<>();
+//        createdBooks.forEach(book -> createdBookDTOS.add(BookConvertor.toDTO(book)));
+        BookDTO dto = BookConvertor.toDTO(book);
+
+        return new ResponseEntity<>(dto, HttpStatus.OK);
       }
-    }
-    catch(Exception e)
-    {
+    } catch (Exception e) {
       logger.error("Failed to add book", e);
-      if(e instanceof HttpClientErrorException){
+      if (e instanceof HttpClientErrorException) {
         return new ResponseEntity<>(((HttpClientErrorException) e).getStatusCode());
       }
     }
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
-  @GetMapping()
-  public ResponseEntity<List<BookDTO>> findAll(@RequestHeader("Authorization") String token) {
+  @CrossOrigin
+  @GetMapping("/books")
+  public ResponseEntity<List<BookDTO>> getAllBooksForUser(@RequestHeader("Authorization") String token) {
 
-    ResponseEntity<Long> response = bookUtil.validate(token);
-    if(response.getStatusCode() == HttpStatus.OK)
-    {
+    ResponseEntity<Long> response = bookUtil.validateToken(token);
+    if (response.getStatusCode() == HttpStatus.OK) {
       List<Book> books = bookRepository.findBookByUserID(response.getBody());
       List<BookDTO> bookDTOS = new ArrayList<>();
       books.forEach(book -> bookDTOS.add(BookConvertor.toDTO(book)));
@@ -85,64 +89,55 @@ public class BookController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
-  @PatchMapping("/{bookId}")
-  public ResponseEntity<BookDTO> updateBook(@PathVariable("bookId") long bookId,
-                                         @RequestBody BookDTO bookDTOPatch,
-                                         @RequestHeader("Authorization") String token) throws IllegalAccessException {
-    ResponseEntity<Long> response = bookUtil.validate(token);
-    if(response.getStatusCode() == HttpStatus.OK)
-    {
+  @PatchMapping("/books/{bookId}")
+  public ResponseEntity<BookDTO> updateBook(@PathVariable("bookId") Long bookId,
+                                            @RequestBody BookDTO bookDTO,
+                                            @RequestHeader("Authorization") String token) throws IllegalAccessException {
+    ResponseEntity<Long> response = bookUtil.validateToken(token);
+    if (response.getStatusCode() == HttpStatus.OK) {
       Optional<Book> book = bookRepository.findById(bookId);
-      if(book.isPresent())
-      {
+      if (book.isPresent()) {
         Book existingBook = book.get();
-        boolean updated = patcher.bookPatcher(existingBook, BookConvertor.toEntity(bookDTOPatch));
-        if(updated)
-        {
+        boolean updated = patcher.bookPatcher(existingBook, BookConvertor.toEntity(bookDTO));
+        if (updated) {
           existingBook = bookRepository.save(existingBook);
           return new ResponseEntity<>(BookConvertor.toDTO(existingBook), HttpStatus.OK);
-        }
-        else {
+        } else {
           return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
       }
       return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
 
-    }
-    else {
+    } else {
       return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
     }
   }
 
-  @DeleteMapping("/{bookId}")
-  public ResponseEntity<Void> removeBook(@PathVariable long bookId,
+  @CrossOrigin
+  @DeleteMapping("/books/{bookId}")
+  public ResponseEntity<Void> removeBook(@PathVariable("bookId") Long bookId,
                                          @RequestHeader("Authorization") String token) {
-    ResponseEntity<Long> response = bookUtil.validate(token);
-    if(response.getStatusCode() == HttpStatus.OK)
-    {
+    ResponseEntity<Long> response = bookUtil.validateToken(token);
+    if (response.getStatusCode() == HttpStatus.OK) {
       Optional<Book> book = bookRepository.findById(bookId);
-      if(book.isPresent())
-      {
+      if (book.isPresent()) {
         Book toBeDeleted = book.get();
-        if(Objects.equals(toBeDeleted.getUserID(), response.getBody()))
-        {
+        if (Objects.equals(toBeDeleted.getUserID(), response.getBody())) {
           bookRepository.delete(toBeDeleted);
           return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        else
-        {
+        } else {
           return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
       }
     }
-      return new ResponseEntity<>(response.getStatusCode());
+    return new ResponseEntity<>(response.getStatusCode());
   }
 
-  @PostMapping("/exchange")
+  @PostMapping("/books/exchange")
   public ResponseEntity<Void> exchangeBook(@RequestBody String changeRequest,
-                                           @RequestHeader("Authorization") String token){
-    ResponseEntity<Long> response = bookUtil.validate(token);
-    if(response.getStatusCode() == HttpStatus.OK){
+                                           @RequestHeader("Authorization") String token) {
+    ResponseEntity<Long> response = bookUtil.validateToken(token);
+    if (response.getStatusCode() == HttpStatus.OK) {
       JSONObject jsonObject = new JSONObject(changeRequest);
       long requesterBookID = jsonObject.getLong("requesterBookID");
       long requestingBookID = jsonObject.getLong("requestingBookID");
@@ -150,37 +145,30 @@ public class BookController {
       String modeOfDelivery = jsonObject.has("modeOfDelivery") ? jsonObject.getString("modeOfDelivery") : "null";
 
       Optional<Book> requesterBook = bookRepository.findById(requesterBookID);
-      if(requesterBook.isPresent())
-      {
+      if (requesterBook.isPresent()) {
         Book requesterBookObj = requesterBook.get();
-        if(Objects.equals(requesterBookObj.getUserID(), response.getBody()))
-        {
+        if (Objects.equals(requesterBookObj.getUserID(), response.getBody())) {
           Optional<Book> requestingBook = bookRepository.findById(requestingBookID);
-          if(requestingBook.isPresent())
-          {
+          if (requestingBook.isPresent()) {
             Book requestingBookObj = requestingBook.get();
             OrderHistory orderHistory = new OrderHistory(
-                    requestingBookObj.getUserID(),
-                    requestingBookObj.getId(),
-                    requesterBookObj.getUserID(),
-                    requesterBookObj.getId(),
-                    EXCHANGE,
-                    duration,
-                    modeOfDelivery.equals("null") ? DeliveryMode.STANDARD:DeliveryMode.valueOf(modeOfDelivery.toUpperCase()));
+                requestingBookObj.getUserID(),
+                requestingBookObj.getId(),
+                requesterBookObj.getUserID(),
+                requesterBookObj.getId(),
+                EXCHANGE,
+                duration,
+                modeOfDelivery.equals("null") ? DeliveryMode.STANDARD : DeliveryMode.valueOf(modeOfDelivery.toUpperCase()));
             orderHistoryRepository.save(orderHistory);
             return new ResponseEntity<>(HttpStatus.OK);
-          }
-          else {
+          } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
           }
-        }
-        else
-        {
+        } else {
           return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
 
-      }
-      else {
+      } else {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
       }
     }

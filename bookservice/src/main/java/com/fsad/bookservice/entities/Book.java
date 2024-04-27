@@ -11,7 +11,6 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "Book")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -22,11 +21,9 @@ public class Book {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @JsonProperty("id")
-  private long id;
+  private Long id;
 
   @Column(nullable = false)
-  @JsonProperty("title")
   private String title;
 
   @Column(nullable = false)
