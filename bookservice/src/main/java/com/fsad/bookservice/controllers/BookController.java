@@ -45,24 +45,14 @@ public class BookController {
   @CrossOrigin
   @PostMapping("/books")
   public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO,
-                                          @RequestHeader("Authorization") String token) {
+                                         @RequestHeader("Authorization") String token) {
     try {
       ResponseEntity<Long> response = bookUtil.validateToken(token);
       if (response.getStatusCode() == HttpStatus.OK) {
-//        List<Book> books = new ArrayList<>();
-//        bookDTOS.forEach(bookDTO -> {
-//          bookDTO.setUserID(response.getBody());
-//          books.add(BookConvertor.toEntity(bookDTO));
-//        });
         bookDTO.setUserID(response.getBody());
         Book book = BookConvertor.toEntity(bookDTO);
-
-//        List<Book> createdBooks = bookRepository.saveAll(books);
         Book savedBook = bookRepository.save(book);
-
-//        List<BookDTO> createdBookDTOS = new ArrayList<>();
-//        createdBooks.forEach(book -> createdBookDTOS.add(BookConvertor.toDTO(book)));
-        BookDTO dto = BookConvertor.toDTO(book);
+        BookDTO dto = BookConvertor.toDTO(savedBook);
 
         return new ResponseEntity<>(dto, HttpStatus.OK);
       }
@@ -89,6 +79,7 @@ public class BookController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @CrossOrigin
   @PatchMapping("/books/{bookId}")
   public ResponseEntity<BookDTO> updateBook(@PathVariable("bookId") Long bookId,
                                             @RequestBody BookDTO bookDTO,

@@ -6,6 +6,7 @@ export default function Books(props) {
 
   const [books, setBooks] = useState([]);
   const [addForm, setAddForm] = useState(false);
+  const [editForm, setEditForm] = useState(false);
 
 //   const loggedInUsername = localStorage.getItem("username");
 
@@ -54,6 +55,8 @@ export default function Books(props) {
   const displayAddForm = ()=> {
     console.log('Display only add form now.');
     setAddForm(true);
+    // hide the edit form if shown
+    setEditForm(false);
   }
 
   const [title, setTitle] = useState('');
@@ -137,6 +140,66 @@ export default function Books(props) {
   const handleInputChange = (event, setStateFunction) => {
     setStateFunction(event.target.value);
   };
+
+
+  const [updateBookId, setUpdateBookId] = useState('');
+  const [updateTitle, setUpdateTitle] = useState('');
+  const [updateAuthor, setUpdateAuthor] = useState('');
+  const [updateGenre, setupdateGenre] = useState('');
+  const [updateBookCondition, setupdateBookCondition] = useState('');
+  const [updatePublisher, setUpdatePublisher] = useState('');
+  const handleBookEdit = (i) => {
+    console.log('Display only edit form now.', i);
+    setEditForm(true);
+    // hide the add form if shown.
+    setAddForm(false);
+
+    const book = books.filter((book, index) => index === i);
+    console.log('book to edit: ', book);
+
+    setUpdateBookId(book[0].id);
+    setUpdateTitle(book[0].title);
+    setUpdateAuthor(book[0].author);
+    setupdateGenre(book[0].author);
+    setupdateBookCondition(book[0].bookCondition);
+    setUpdatePublisher(book[0].publisher);
+  }
+
+  const updateBook = ()=> {
+    const requestBody = {
+        title: updateTitle,
+        author: updateAuthor,
+        genre: updateGenre,
+        bookCondition: updateBookCondition,
+        publisher: updatePublisher
+      };
+      console.log("update book request body: ",requestBody);
+
+      fetch(`http://localhost:9001/books/${updateBookId}`,{
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            },
+            body: JSON.stringify(requestBody)
+        }).then(response => {
+            console.log("update book response : ",response);
+            if(response.ok) {
+                setReload(true);
+                closeEditForm();
+                props.showAlert('Book '+ updateTitle +' updated successfully!!', "success");
+                // return response.json();
+            } else {
+                console.log('Server Error!!', response);
+                return 'error';
+            }
+        });
+  }
+
+  const closeEditForm = ()=> {
+    console.log('close edit form and show other components');
+    setEditForm(false);
+  }
     
   return (
     <div className='container'>
@@ -176,7 +239,8 @@ export default function Books(props) {
                             {item.publisher}
                         </td>
                         <td>
-                            <button type="button" className="btn btn-outline-danger btn-sm" onClick={() => handleBookDelete(index)} >Delete</button>
+                            <button type="button" className="btn btn-outline-warning btn-sm mx-1" onClick={() => handleBookEdit(index)} >Edit</button>
+                            <button type="button" className="btn btn-outline-danger btn-sm mx-1" onClick={() => handleBookDelete(index)} >Delete</button>
                         </td>
                     </tr>
                 })}
@@ -224,7 +288,52 @@ export default function Books(props) {
             <button type="button" className="btn btn-link" onClick={closeAddForm}>Cancel</button>
         </form>
       </div>
-      <button type="button" className={`btn btn-primary my-2 ${addForm ? 'hidden' : ''}`} onClick={displayAddForm}>Add Book</button>
+      <button type="button" className={`btn btn-primary my-2 ${addForm || editForm ? 'hidden' : ''}`} onClick={displayAddForm}>Add Book</button>
+
+      {/* Edit book container below */}
+
+      <div className={`edit-book-form container ${editForm ? '' : 'hidden'} `}>
+        <h4>Edit Book</h4>
+        <form>
+            <table className="table table-hover table-sm">
+                <tbody>
+                    <tr>
+                        <th scope="col">Title</th>
+                        <td><input type="text" id="title" className="form-control" value={updateTitle} onChange={(event) => handleInputChange(event, setUpdateTitle)} required/></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Author</th>
+                        <td><input type="text" id="author" className="form-control" value={updateAuthor} onChange={(event) => handleInputChange(event, setUpdateAuthor)} required/></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Genre</th>
+                        <td><input type="text" id="genre" className="form-control" value={updateGenre} onChange={(event) => handleInputChange(event, setupdateGenre)} required/></td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Book condition</th>
+                        {/* <input type="text" id="bookCondition" className="form-control" value={bookCondition} onChange={(event) => handleInputChange(event, setBookCondition)} required/> */}
+                        <td>
+                            <select className="form-select" aria-label="Default select example"
+                            value={updateBookCondition} 
+                            onChange={(event) => handleInputChange(event, setupdateBookCondition)}
+                            >
+                            <option value='' disabled>Open this select menu</option>
+                            <option value="BEST">BEST</option>
+                            <option value="GOOD">GOOD</option>
+                            <option value="POOR">POOR</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="col">Publisher</th>
+                        <td><input type="text" id="publisher" className="form-control" value={updatePublisher} onChange={(event) => handleInputChange(event, setUpdatePublisher)} required/></td>
+                    </tr>
+                </tbody>
+            </table>
+            <button type="button" className="btn btn-primary" onClick={updateBook}>Update Book</button>
+            <button type="button" className="btn btn-link" onClick={closeEditForm}>Cancel</button>
+        </form>
+      </div>
     </div>
   )
 }
