@@ -143,6 +143,7 @@ export default function Books(props) {
         console.log('bookToDelete is not present');
     }
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [bookToDelete]); // Log bookToDelete inside useEffect to see updated value
 
   const handleInputChange = (event, setStateFunction) => {

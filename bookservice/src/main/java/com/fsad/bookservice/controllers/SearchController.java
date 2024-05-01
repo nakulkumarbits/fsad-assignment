@@ -33,7 +33,7 @@ public class SearchController {
       ResponseEntity<Long> response = bookUtil.validateToken(token);
       if (response.getStatusCode() == HttpStatus.OK) {
         SearchResponseDTO searchResponseDTO = searchService.search(allParams, response.getBody(), page, size);
-        log.info("[getBooks] searchResponseDTO : {}", searchResponseDTO);
+//        log.info("[getBooks] searchResponseDTO : {}", searchResponseDTO);
         return new ResponseEntity<>(searchResponseDTO, HttpStatus.OK);
       }
     } catch (Exception e) {

@@ -3,9 +3,11 @@ package com.fsad.bookservice.service;
 import com.fsad.bookservice.dto.BookDTO;
 import com.fsad.bookservice.dto.SearchResponseDTO;
 import com.fsad.bookservice.entities.Book;
+import com.fsad.bookservice.entities.Wishlist;
 import com.fsad.bookservice.enums.SearchFilter;
 import com.fsad.bookservice.model.SearchFilterParams;
 import com.fsad.bookservice.repository.BookRepository;
+import com.fsad.bookservice.repository.WishlistRepository;
 import com.fsad.bookservice.utils.BookConvertor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,16 +15,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SearchService {
 
   @Autowired
   private BookRepository bookRepository;
+
+  @Autowired
+  private WishlistRepository wishlistRepository;
 
   public SearchResponseDTO search(Map<String, String> allParams, Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
@@ -35,8 +38,19 @@ public class SearchService {
         .build();
 
     if (bookPage.getTotalElements() > 0) {
+
+      List<Wishlist> wishlists = wishlistRepository.findByUserId(userId);
+      Set<Long> bookIdsInWishlist = wishlists.stream().map(Wishlist::getBookId).collect(Collectors.toSet());
+
       List<BookDTO> bookDTOS = new ArrayList<>();
-      bookPage.getContent().forEach(book -> bookDTOS.add(BookConvertor.toDTO(book)));
+      for (Book book : bookPage.getContent()) {
+        BookDTO bookDTO = BookConvertor.toDTO(book);
+        if (bookIdsInWishlist.contains(book.getId())) {
+          bookDTO.setInWishlist(true);
+        }
+        bookDTOS.add(bookDTO);
+      }
+
       searchResponseDTO.setBookDTOs(bookDTOS);
     } else {
       searchResponseDTO.setBookDTOs(Collections.emptyList());

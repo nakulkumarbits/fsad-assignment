@@ -48,7 +48,8 @@ export default function UserProfile(props) {
           }
 
         count.current++;
-        }, []); // eslint-disable-next-line
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []);
 
         const [showProfile, setShowProfile] = useState(true); // Initially show profile form
         const toggleForm = () => {

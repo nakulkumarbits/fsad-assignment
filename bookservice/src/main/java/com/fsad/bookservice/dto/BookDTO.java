@@ -19,4 +19,5 @@ public class BookDTO {
   private String publisher;
   @JsonProperty("userId")
   private Long userID;
+  private boolean inWishlist;
 }

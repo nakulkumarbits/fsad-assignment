@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @Slf4j
 public class WishlistController {
@@ -20,7 +21,6 @@ public class WishlistController {
   @Autowired
   private WishlistService wishlistService;
 
-  @CrossOrigin
   @GetMapping("/wishlist")
   public ResponseEntity<WishlistDTO> getBooksFromWishlist(@RequestParam(name = "page", defaultValue = "0") int page,
                                                           @RequestParam(name = "size", defaultValue = "10") int size,
@@ -40,7 +40,7 @@ public class WishlistController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
-  @CrossOrigin
+  //  @CrossOrigin
   @PostMapping("/wishlist/{bookId}")
   public ResponseEntity<Void> addBookToWishlist(@PathVariable("bookId") Long bookId,
                                                 @RequestHeader("Authorization") String token) {
@@ -59,7 +59,6 @@ public class WishlistController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
-  @CrossOrigin
   @DeleteMapping("/wishlist/{bookId}")
   public ResponseEntity<Void> removeBookFromWishlist(@PathVariable("bookId") Long bookId,
                                                      @RequestHeader("Authorization") String token) {
