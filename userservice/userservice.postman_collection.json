@@ -12,7 +12,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"userName\":\"nakulkumar\",\n    \"password\":\"dummypassword\",\n    \"firstName\":\"nakul\",\n    \"lastName\":\"kumar\",\n    \"email\":\"2023mt93202@wilp.bits-pilani.ac.in\",\n    \"addressDTO\" : {\n        \"addressLine1\":\"12/B Galaxy apartments\",\n        \"addressLine2\":\"1st floor\",\n        \"city\":\"New Delhi\",\n        \"state\":\"Delhi\",\n        \"pincode\":\"110062\"\n    }\n}",
+					"raw": "{\n    \"username\":\"nakulkumar\",\n    \"password\":\"dummypassword\",\n    \"firstName\":\"nakul\",\n    \"lastName\":\"kumar\",\n    \"email\":\"2023mt93202@wilp.bits-pilani.ac.in\",\n    \"addressDTO\" : {\n        \"addressLine1\":\"12/B Galaxy apartments\",\n        \"addressLine2\":\"1st floor\",\n        \"city\":\"New Delhi\",\n        \"state\":\"Delhi\",\n        \"pincode\":\"110062\"\n    }\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -152,13 +152,13 @@
 			"response": []
 		},
 		{
-			"name": "/token",
+			"name": "/token/validate",
 			"request": {
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"token\":\"eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6IjM2ZDgzZGZmZDc5ZTQ1YTJhMjRjNjI1OTA1NDc3NDc0IiwiaWF0IjoxNzEzMjg2Nzg2LCJleHAiOjE3MTMyODY5MDZ9.dOje787LVG1RImKSAPfIyMlBRue13-GiXDHDQoHCfKtP9oP8OMIdtClRF2F3WUaYSgSn7QhYrLb7q__Z85r1ig\"\n}",
+					"raw": "{\n    \"token\": \"eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiNzY3M2RmNTVkMWVlNDg0Y2I3NjYyNzY0YWY4N2EyMGYiLCJpYXQiOjE3MTQ1NjY3MzQsImV4cCI6MTcxNDU2NzMzNH0.9ZYNLZlnaXutyAkpAMzsZOHNagAj-qqlDl9pJt3s47aQG87jWBw-7cm3rZykrwKZ_Rafc40QU2ZP6m6pmjGd0g\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -166,13 +166,14 @@
 					}
 				},
 				"url": {
-					"raw": "localhost:9000/token",
+					"raw": "localhost:9000/token/validate",
 					"host": [
 						"localhost"
 					],
 					"port": "9000",
 					"path": [
-						"token"
+						"token",
+						"validate"
 					]
 				}
 			},

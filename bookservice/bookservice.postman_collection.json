@@ -1,0 +1,154 @@
+{
+	"info": {
+		"_postman_id": "00fc9399-22e4-462b-bcb2-12ec8c7eef20",
+		"name": "bookservice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "/search",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiMzc3NmY0MzZmNTg3NDI3YWJlNTA4MzE3OWE1ZGI1MGIiLCJpYXQiOjE3MTQ1NjYxMDgsImV4cCI6MTcxNDU2NjcwOH0.9CO3FcFxQO5JRgWFbq7pZANuRtfB33_xRUSfP72l0zQBy6oPMg0YYtslnQ8WU311v7ibl3vWZ1H_aBrsaabOOg",
+						"type": "text"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9001/search?genre=cs&author=&title=&location=&page=0&size=1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "genre",
+							"value": "cs"
+						},
+						{
+							"key": "author",
+							"value": ""
+						},
+						{
+							"key": "title",
+							"value": ""
+						},
+						{
+							"key": "location",
+							"value": ""
+						},
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wishlist/{bookId}",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiMzc3NmY0MzZmNTg3NDI3YWJlNTA4MzE3OWE1ZGI1MGIiLCJpYXQiOjE3MTQ1NjYxMDgsImV4cCI6MTcxNDU2NjcwOH0.9CO3FcFxQO5JRgWFbq7pZANuRtfB33_xRUSfP72l0zQBy6oPMg0YYtslnQ8WU311v7ibl3vWZ1H_aBrsaabOOg",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9001/wishlist/30",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"wishlist",
+						"30"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wishlist",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiNzY3M2RmNTVkMWVlNDg0Y2I3NjYyNzY0YWY4N2EyMGYiLCJpYXQiOjE3MTQ1NjY3MzQsImV4cCI6MTcxNDU2NzMzNH0.9ZYNLZlnaXutyAkpAMzsZOHNagAj-qqlDl9pJt3s47aQG87jWBw-7cm3rZykrwKZ_Rafc40QU2ZP6m6pmjGd0g",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9001/wishlist?page=0&size=10",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"wishlist"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "0"
+						},
+						{
+							"key": "size",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/wishlist",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiNzY3M2RmNTVkMWVlNDg0Y2I3NjYyNzY0YWY4N2EyMGYiLCJpYXQiOjE3MTQ1NjY3MzQsImV4cCI6MTcxNDU2NzMzNH0.9ZYNLZlnaXutyAkpAMzsZOHNagAj-qqlDl9pJt3s47aQG87jWBw-7cm3rZykrwKZ_Rafc40QU2ZP6m6pmjGd0g",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "localhost:9001/wishlist/30",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"wishlist",
+						"30"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
