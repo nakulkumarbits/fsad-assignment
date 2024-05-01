@@ -33,7 +33,7 @@ export default function LoginRegister(props) {
     .then(response => {
       if(response.ok) {
         localStorage.setItem("username", username);
-        console.log('Login successful');
+        // console.log('Login successful');
         props.showAlert('Login successful', "success");
         return response.json();
       } else if(response.status >=400 && response.status < 500){

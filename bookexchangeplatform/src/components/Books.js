@@ -91,13 +91,19 @@ export default function Books(props) {
                 // return response.json();
             } else {
                 console.log('Server Error!!', response);
-                return 'error';
+                localStorage.removeItem("token");
+                navigate("/login");
             }
         });
   }
 
   const closeAddForm = ()=> {
     console.log('close add form and show other components');
+    setTitle('');
+    setAuthor('');
+    setGenre('');
+    setBookCondition('');
+    setPublisher('');
     setAddForm(false);
   }
 
@@ -249,7 +255,7 @@ export default function Books(props) {
         </tbody>
         </table>      
       </div>
-      <div className={`add-book-form container ${addForm ? '' : 'hidden'} `}>
+      <div className={`add-book-form-class container ${addForm ? '' : 'hidden'} `}>
         <form>
             <table className="table table-hover table-sm">
                 <tbody>
