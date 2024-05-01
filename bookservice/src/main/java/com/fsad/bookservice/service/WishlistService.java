@@ -39,7 +39,7 @@ public class WishlistService {
       wishlistDTO.setBookDTOs(bookDTOS);
       wishlistDTO.setSize(size);
       wishlistDTO.setPage(page);
-      wishlistDTO.setTotalPages(wishlistDTO.getTotalPages());
+      wishlistDTO.setTotalPages(wishlists.getTotalPages());
       wishlistDTO.setTotalElements(wishlists.getTotalElements());
     }
     return wishlistDTO;

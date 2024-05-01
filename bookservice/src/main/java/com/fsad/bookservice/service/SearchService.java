@@ -39,6 +39,7 @@ public class SearchService {
 
     if (bookPage.getTotalElements() > 0) {
 
+      // Todo : Call only for bookIds which are present in page - findByUserIdAndBookIdIn(..).
       List<Wishlist> wishlists = wishlistRepository.findByUserId(userId);
       Set<Long> bookIdsInWishlist = wishlists.stream().map(Wishlist::getBookId).collect(Collectors.toSet());
 
