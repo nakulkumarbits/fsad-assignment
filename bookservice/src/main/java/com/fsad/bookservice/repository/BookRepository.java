@@ -9,8 +9,5 @@ import java.util.List;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Long>, JpaSpecificationExecutor<Book> {
-
-  List<Book> findByGenreAndAuthorAndTitleAndUserIDNot(String genre, String author, String title, Long userId);
-
   List<Book> findBookByUserID(long userID);
 }
