@@ -140,8 +140,8 @@ useEffect(() => {
 },[bookIdForWishlist, toggleBookWishlist]);
 
 const removeBookFromWishlist = () => {
-  const addToWishlistUrl = `http://localhost:9001/wishlist/${bookIdForWishlist}`;
-  fetch(addToWishlistUrl, {
+  const removeWishlistUrl = `http://localhost:9001/wishlist/${bookIdForWishlist}`;
+  fetch(removeWishlistUrl, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',

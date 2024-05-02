@@ -35,7 +35,11 @@ public class WishlistService {
       List<Long> bookIds = wishlists.getContent().stream().map(Wishlist::getBookId).toList();
       List<Book> books = bookRepository.findAllById(bookIds);
       List<BookDTO> bookDTOS = new ArrayList<>();
-      books.forEach(book -> bookDTOS.add(BookConvertor.toDTO(book)));
+      for (Book book : books) {
+        BookDTO bookDTO = BookConvertor.toDTO(book);
+        bookDTO.setInWishlist(true);
+        bookDTOS.add(bookDTO);
+      }
       wishlistDTO.setBookDTOs(bookDTOS);
       wishlistDTO.setSize(size);
       wishlistDTO.setPage(page);
