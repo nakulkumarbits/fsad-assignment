@@ -10,6 +10,7 @@ public class OrderConvertor {
       return null;
     }
     return Order.builder()
+        .id(orderDTO.getId())
         .action(orderDTO.getAction())
         .deliveryMode(orderDTO.getDeliveryMode())
         .duration(orderDTO.getDuration())
@@ -27,6 +28,7 @@ public class OrderConvertor {
     }
 
     return OrderDTO.builder()
+        .id(order.getId())
         .action(order.getAction())
         .deliveryMode(order.getDeliveryMode())
         .duration(order.getDuration())
@@ -35,6 +37,7 @@ public class OrderConvertor {
         .ownerBookID(order.getOwnerBookID())
         .recipientID(order.getRecipientID())
         .recipientBookID(order.getRecipientBookID())
+        .createdDate(order.getCreatedDate().toLocalDate())
         .build();
   }
 }

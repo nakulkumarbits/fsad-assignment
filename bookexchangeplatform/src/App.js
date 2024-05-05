@@ -11,6 +11,7 @@ import About from './components/About';
 import UserProfile from './components/UserProfile';
 import Books from './components/Books';
 import Wishlist from './components/Wishlist';
+import Order from './components/Order';
 
 function App() {
 
@@ -42,6 +43,7 @@ function App() {
               <Route exact path="/userprofile" element={<UserProfile showAlert={showAlert} />}></Route>
               <Route exact path='/books' element={<Books showAlert={showAlert}/>}></Route>
               <Route exact path='/wishlist' element={<Wishlist showAlert={showAlert}/>}></Route>
+              <Route exact path='/orders' element={<Order showAlert={showAlert}/>}></Route>
               <Route exact path="/about" element={<About />}></Route>
               <Route
                 exact

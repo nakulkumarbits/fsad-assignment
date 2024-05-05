@@ -41,6 +41,26 @@ export default function NavBar(props) {
                 <a className="nav-link" href="/wishlist">My Wishlist</a>
               </li>) : ('')
             }
+            {
+              localStorage.getItem("token") ? 
+              (<li className="nav-item">
+                <a className="nav-link" href="/orders">My Orders</a>
+              </li>) : ('')
+            }
+
+            {/* <li className="nav-item dropdown">
+              <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Dropdown
+              </a>
+              <ul className="dropdown-menu">
+                <li><a className="dropdown-item" href="/userprofile">User Profile</a></li>
+                <li><a className="dropdown-item" href="/books">My Books</a></li>
+                <li><hr className="dropdown-divider" /></li>
+                <li><a className="dropdown-item" href="/about">About</a></li>
+              </ul> 
+            </li> */}
+
+
             <li className="nav-item">
               <a className="nav-link" href="/about">About</a>
             </li>

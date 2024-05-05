@@ -7,6 +7,8 @@ import jakarta.validation.constraints.Min;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 @Data
 @Builder
 public class OrderDTO {
@@ -20,5 +22,5 @@ public class OrderDTO {
   @Min(value = 1, message = "Duration cannot be less than 1.")
   private Integer duration;
   private DeliveryMode deliveryMode;
-
+  private LocalDate createdDate;
 }

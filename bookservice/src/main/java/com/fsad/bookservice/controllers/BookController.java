@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class BookController {
 
@@ -33,7 +34,6 @@ public class BookController {
 
   private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
-  @CrossOrigin
   @PostMapping("/books")
   public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO,
                                          @RequestHeader("Authorization") String token) {
@@ -56,7 +56,6 @@ public class BookController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
-  @CrossOrigin
   @GetMapping("/books")
   public ResponseEntity<List<BookDTO>> getAllBooksForUser(@RequestHeader("Authorization") String token) {
 
@@ -70,7 +69,6 @@ public class BookController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
-  @CrossOrigin
   @PatchMapping("/books/{bookId}")
   public ResponseEntity<BookDTO> updateBook(@PathVariable("bookId") Long bookId,
                                             @RequestBody BookDTO bookDTO,
@@ -95,7 +93,6 @@ public class BookController {
     }
   }
 
-  @CrossOrigin
   @DeleteMapping("/books/{bookId}")
   public ResponseEntity<Void> removeBook(@PathVariable("bookId") Long bookId,
                                          @RequestHeader("Authorization") String token) {
@@ -113,5 +110,21 @@ public class BookController {
       }
     }
     return new ResponseEntity<>(response.getStatusCode());
+  }
+
+  @GetMapping("/books/{bookId}")
+  public ResponseEntity<BookDTO> getBook(@PathVariable("bookId") Long bookId,
+                                         @RequestHeader("Authorization") String token) {
+    ResponseEntity<Long> response = bookUtil.validateToken(token);
+    if (response.getStatusCode() == HttpStatus.OK) {
+      Optional<Book> book = bookRepository.findById(bookId);
+      if (book.isPresent()) {
+        Book existingBook = book.get();
+        return new ResponseEntity<>(BookConvertor.toDTO(existingBook), HttpStatus.OK);
+      }
+      return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    } else {
+      return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+    }
   }
 }

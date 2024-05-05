@@ -45,7 +45,7 @@ public class Order {
   @Column(nullable = false)
   @Enumerated(value = EnumType.STRING)
   private OrderStatus orderStatus;
-  
+
   private Integer duration;
 
   @Column(nullable = false)

@@ -1,12 +1,14 @@
 package com.fsad.bookservice.controllers;
 
 import com.fsad.bookservice.dto.OrderDTO;
+import com.fsad.bookservice.dto.OrderResponseDTO;
 import com.fsad.bookservice.entities.Book;
 import com.fsad.bookservice.entities.Order;
 import com.fsad.bookservice.enums.DeliveryMode;
 import com.fsad.bookservice.enums.OrderStatus;
 import com.fsad.bookservice.repository.BookRepository;
 import com.fsad.bookservice.repository.OrderRepository;
+import com.fsad.bookservice.service.OrderService;
 import com.fsad.bookservice.utils.BookUtil;
 import com.fsad.bookservice.utils.OrderConvertor;
 import com.fsad.bookservice.utils.Patcher;
@@ -17,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
 import java.util.Objects;
@@ -44,7 +47,29 @@ public class OrderController {
   @Autowired
   private Patcher patcher;
 
+  @Autowired
+  private OrderService orderService;
+
   private final List<OrderStatus> ALLOWED_STATUS_LIST = List.of(AWAITING_OWNER_RESPONSE, INITIATE_DELIVERY, DELIVERY_IN_TRANSIT);
+
+  @GetMapping("/orders")
+  public ResponseEntity<OrderResponseDTO> getOrderSummary(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                          @RequestParam(name = "size", defaultValue = "10") int size,
+                                                          @RequestHeader("Authorization") String token) {
+    try {
+      ResponseEntity<Long> response = bookUtil.validateToken(token);
+      if (response.getStatusCode() == HttpStatus.OK) {
+        OrderResponseDTO orderSummary = orderService.getOrderSummary(response.getBody(), page, size);
+        return new ResponseEntity<>(orderSummary, HttpStatus.OK);
+      }
+    } catch (Exception e) {
+      log.error("[getOrderSummary] Failed to get orders", e);
+      if (e instanceof HttpClientErrorException) {
+        return new ResponseEntity<>(((HttpClientErrorException) e).getStatusCode());
+      }
+    }
+    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+  }
 
   @PostMapping("/exchange")
   public ResponseEntity<Void> exchangeBook(@RequestBody OrderDTO orderDTO,
