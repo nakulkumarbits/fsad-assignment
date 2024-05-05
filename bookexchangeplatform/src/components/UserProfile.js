@@ -43,6 +43,7 @@ export default function UserProfile(props) {
                     // console.log('user profile : ', response);
                     setAddress(response.addressDTO);
                     setUser(response);
+                    // setFirstName(response.firstName)
                 }
             });
           }

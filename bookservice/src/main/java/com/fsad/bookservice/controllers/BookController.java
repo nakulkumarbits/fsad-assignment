@@ -2,14 +2,10 @@ package com.fsad.bookservice.controllers;
 
 import com.fsad.bookservice.dto.BookDTO;
 import com.fsad.bookservice.entities.Book;
-import com.fsad.bookservice.entities.OrderHistory;
-import com.fsad.bookservice.enums.DeliveryMode;
 import com.fsad.bookservice.repository.BookRepository;
-import com.fsad.bookservice.repository.OrderHistoryRepository;
 import com.fsad.bookservice.utils.BookConvertor;
 import com.fsad.bookservice.utils.BookUtil;
 import com.fsad.bookservice.utils.Patcher;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,16 +19,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import static com.fsad.bookservice.enums.Action.EXCHANGE;
-
 @RestController
 public class BookController {
 
   @Autowired
   private BookRepository bookRepository;
-
-  @Autowired
-  private OrderHistoryRepository orderHistoryRepository;
 
   @Autowired
   private BookUtil bookUtil;
@@ -123,48 +114,4 @@ public class BookController {
     }
     return new ResponseEntity<>(response.getStatusCode());
   }
-
-  @PostMapping("/books/exchange")
-  public ResponseEntity<Void> exchangeBook(@RequestBody String changeRequest,
-                                           @RequestHeader("Authorization") String token) {
-    ResponseEntity<Long> response = bookUtil.validateToken(token);
-    if (response.getStatusCode() == HttpStatus.OK) {
-      JSONObject jsonObject = new JSONObject(changeRequest);
-      long requesterBookID = jsonObject.getLong("requesterBookID");
-      long requestingBookID = jsonObject.getLong("requestingBookID");
-      int duration = jsonObject.getInt("duration");
-      String modeOfDelivery = jsonObject.has("modeOfDelivery") ? jsonObject.getString("modeOfDelivery") : "null";
-
-      Optional<Book> requesterBook = bookRepository.findById(requesterBookID);
-      if (requesterBook.isPresent()) {
-        Book requesterBookObj = requesterBook.get();
-        if (Objects.equals(requesterBookObj.getUserID(), response.getBody())) {
-          Optional<Book> requestingBook = bookRepository.findById(requestingBookID);
-          if (requestingBook.isPresent()) {
-            Book requestingBookObj = requestingBook.get();
-            OrderHistory orderHistory = new OrderHistory(
-                requestingBookObj.getUserID(),
-                requestingBookObj.getId(),
-                requesterBookObj.getUserID(),
-                requesterBookObj.getId(),
-                EXCHANGE,
-                duration,
-                modeOfDelivery.equals("null") ? DeliveryMode.STANDARD : DeliveryMode.valueOf(modeOfDelivery.toUpperCase()));
-            orderHistoryRepository.save(orderHistory);
-            return new ResponseEntity<>(HttpStatus.OK);
-          } else {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-          }
-        } else {
-          return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-        }
-
-      } else {
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-      }
-    }
-    return new ResponseEntity<>(response.getStatusCode());
-  }
-
-
 }

@@ -2,6 +2,8 @@ import React, {useState, useEffect, useRef} from 'react';
 import { useNavigate } from "react-router-dom";
 import Paginate from './Paginate';
 
+import Prompt from './Prompt';
+
 export default function Search(props) {
   const [books, setBooks] = useState([]);
   const [genre, setGenre] = useState('');
@@ -22,6 +24,11 @@ export default function Search(props) {
   const [nPages, setNPages] = useState(0);
   const recordsPerPage = 5;
   const [totalElements, setTotalElements] = useState(0);
+
+  const [duration, setDuration] = useState('');
+  const [deliveryMode, setDeliveryMode] = useState('');
+  const [exchangeForm, setExchangeForm] = useState(false);
+  // const [bookIdForBorrow, setBookIdForBorrow] = useState(0);
 
   let navigate = useNavigate();
   const handleSearch = ()=> {
@@ -113,11 +120,117 @@ const nextPage = () => {
   }
 };
 
-const handleBookExchange = () => {
+const [bookIdForExchange, setBookIdForExchange] = useState('');
+const [bookTitleForExchange, setBookTitleForExchange] = useState('');
+const [booksForExchange, setBooksForExchange] = useState([]);
+const [bookIdToExchange, setBookIdToExchange] = useState('');
 
+const handleBookExchange = (id, title) => {
+  // console.log('show exchange form');
+  setBookIdForExchange(id);
+  setBookTitleForExchange(title);
+  setExchangeForm(true);
+
+  const getAllBooksForUser = `http://localhost:9001/books`;
+  fetch(getAllBooksForUser, {
+    method: 'GET',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+    }
+  }).then(response=> {
+      if(response.ok) {
+          // console.log('fetch all books for user :', response);
+          return response.json();
+      } else {
+          console.log('Server Error!!', response);
+          return 'error';
+      }
+  }).then(response=> {
+      if(response === 'error') {
+          console.log('Error in loading books!');
+          localStorage.removeItem("token");
+          navigate("/login");
+      } else {
+          console.log('setting books for exchange : ', response);
+          setBooksForExchange(response);
+          // console.log('length : ', Object.keys(response).length);            
+      }
+  });
 };
 
-const handleBookBorrow = () => {
+const initiateExchange = () => {
+  const requestBody = {
+    action: 'EXCHANGE',
+    ownerBookID: bookIdForExchange,
+    recipientBookID: bookIdToExchange,
+    deliveryMode: deliveryMode.length===0?'STANDARD':deliveryMode,
+  }; 
+  console.log('exchange request : ', requestBody);
+  fetch('http://localhost:9001/exchange', {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': localStorage.getItem('token')
+    },
+    body: JSON.stringify(requestBody)
+  }).then(response => {
+    console.log('response : ', response);
+    if(response.ok) {
+      console.log('request created');
+      props.showAlert('Borrow request raised for Book Id : '+ bookIdForExchange +' !!', "success");
+      closeExchangeForm();
+    } else if(response.status === 409) {
+      props.showAlert('Borrow request already exists for Book Id : '+ bookIdForExchange +' !!', "danger");
+      closeExchangeForm();
+    } else {
+      console.log('server error!!');
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  });
+};
+
+const closeExchangeForm = ()=> {
+  console.log('close exchange form and show other components');
+  setBookIdToExchange('');
+  setDeliveryMode('');
+  setExchangeForm(false);
+}
+
+const handleBookBorrow = (bookIdForBorrow) => {
+  console.log('borrow book', bookIdForBorrow);
+  const requestBody = {
+    action: 'LEND',
+    ownerBookID: bookIdForBorrow,
+    duration,
+    deliveryMode,
+  }; 
+
+  console.log('lend :', requestBody);
+
+  fetch(`http://localhost:9001/lend`,{
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+          'Authorization': localStorage.getItem('token')
+      },
+      body: JSON.stringify(requestBody)
+  }).then(response=>{
+    console.log('borrow res: ', response);
+    if(response.ok) {
+      console.log('request created');
+      props.showAlert('Borrow request raised for Book Id : '+ bookIdForBorrow +' !!', "success");
+    } else if(response.status === 409) {
+      console.log('request exists');
+      props.showAlert('Borrow request already exists for Book Id : '+ bookIdForBorrow +' !!', "danger");
+    } else {
+      console.log('server error!!');
+      localStorage.removeItem("token");
+      navigate("/login");
+    }
+  });
+
 
 };
 
@@ -280,8 +393,23 @@ const handleWishlist = (i, inWishlist, bookId) => {
                             {item.publisher}
                         </td>
                         <td>
-                            <button type="button" className="btn btn-info btn-sm mx-1 my-1" onClick={() => handleBookExchange(index)} >Exchange</button>
-                            <button type="button" className="btn btn-info btn-sm mx-1" onClick={() => handleBookBorrow(index)} >Borrow</button>
+                            <button type="button" className="btn btn-info btn-sm mx-1 my-1" onClick={() => handleBookExchange(item.id, item.title)} >Exchange</button>
+                            {/* <button type="button" className="btn btn-info btn-sm mx-1" onClick={() => handleBookBorrow()} >Borrow</button> */}
+                            {/* <Popup trigger=
+                            {<button> Click to open popup </button>}
+                            position="right center">
+                            <div>GeeksforGeeks</div>
+                            <button onClick={() => handleBookBorrow(index)}>Click here</button>
+                          </Popup> */}
+                          <Prompt handleBookBorrow={handleBookBorrow} 
+                                  bookIdForBorrow={item.id}
+                                  duration={duration}
+                                  setDuration={setDuration}
+                                  deliveryMode={deliveryMode}
+                                  setDeliveryMode={setDeliveryMode}
+                                  handleInputChange={handleInputChange}
+                          />
+                          {/* <GenericPopup message='asfdgf'/> */}
                         </td>
                         <td>
                           <button type="button" className={`btn btn-outline-${item.inWishlist ? 'danger' : 'dark'}`} onClick={() => handleWishlist(index, !item.inWishlist, item.id)}>
@@ -311,8 +439,52 @@ const handleWishlist = (i, inWishlist, bookId) => {
           nextPage={nextPage}
         />
 
-
       </div>
+
+      <div className={`exchange-book-container ${exchangeForm?'':'hidden'}`}>
+        <h3>Exchange book</h3>
+        <form>
+          <table className="table table-hover table-sm">
+            <tbody>
+              <tr>
+                <th scope="col">Book Id</th>
+                <td>{bookIdForExchange}</td>
+              </tr>
+              <tr>
+                <th scope="col">Book title</th>
+                <td>{bookTitleForExchange}</td>
+              </tr>
+              <tr>
+                <th scope="col">Book to exchange with</th>
+                <td>
+                  <select className="form-select" 
+                    value={bookIdToExchange}
+                    onChange={(event) => handleInputChange(event, setBookIdToExchange)}>
+                    <option value='' disabled>Open this select menu</option>
+                    {booksForExchange.map((book, i) => {
+                      return <option key={i} value={book.id}>
+                                {book.title} ({book.bookCondition})
+                            </option>
+                    })}
+                  </select>
+                </td>
+              </tr>
+              <tr>
+                <th scope="col">Delivery Mode</th>
+                <td>
+                  <div onChange={(event) => handleInputChange(event, setDeliveryMode)}>
+                  <input type="radio" value="STANDARD" className='mx-1' name="deliveryMode" defaultChecked/> STANDARD
+                  <input type="radio" value="EXPRESS" className='mx-1'name="deliveryMode"/> EXPRESS
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <button type="button" className="btn btn-primary" onClick={initiateExchange}>Initiate Exchange</button>
+          <button type="button" className="btn btn-link" onClick={closeExchangeForm}>Cancel</button>
+        </form>
+      </div>
+
     </div>
   )
 }

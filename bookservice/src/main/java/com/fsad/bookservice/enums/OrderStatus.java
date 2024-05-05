@@ -16,5 +16,7 @@ public enum OrderStatus {
 
     RETURN_IN_TRANSIT,
 
-    RETURNED
+    RETURNED,
+
+    REQUEST_REJECTED
 }

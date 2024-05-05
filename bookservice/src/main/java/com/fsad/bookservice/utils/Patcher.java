@@ -11,10 +11,9 @@ public class Patcher {
 
         boolean updated = false;
         //GET THE COMPILED VERSION OF THE CLASS
-        Class<?> internClass= Book.class;
-        Field[] internFields=internClass.getDeclaredFields();
-        System.out.println(internFields.length);
-        for(Field field : internFields){
+        Class<?> bookClass= Book.class;
+        Field[] bookFields=bookClass.getDeclaredFields();
+        for(Field field : bookFields){
             System.out.println(field.getName());
             //CANT ACCESS IF THE FIELD IS PRIVATE
             field.setAccessible(true);
