@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import BookDetailPrompt from './BookDetailPrompt';
 import Paginate from './Paginate';
 
-export default function Order() {
+export default function Order(props) {
 
     const [orders, setOrders] = useState([]);
     const [currentPage, setCurrentPage] = useState(0);
@@ -154,8 +154,34 @@ export default function Order() {
         });
     };
 
-    const handleApproveRequest = (ownerBookID) => {
-        console.log('Approve request', ownerBookID);
+    const handleOrderRequest = (orderId, ownerBookID, action, mode) => {
+        console.log('Request for bookId ' + ownerBookID + ', action : ' + action + ', mode : ' + mode);
+        
+        const requestAction = action === 'accept' ? 'accept' : 'reject';
+        const requestMode = mode.toLowerCase() === 'lend' ? 'lend' : 'exchange';
+        const exchangeOrLendRequestUrl = `http://localhost:9001/${requestMode}/${orderId}/${requestAction}`;
+        
+        fetch(exchangeOrLendRequestUrl, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': localStorage.getItem('token')
+            }
+        }).then(response => {
+            console.log('response ' , response);
+            if(response.ok) {
+                console.log('lending request approved');
+                props.showAlert('Order Id : '+ orderId +' approved !!', "success");
+                orderRequests();
+            } else if(response.status === 400){
+                console.log('lending request failed, show popup');
+                props.showAlert('Order Id : '+ orderId +' processing error !!', "danger");
+            } else {
+                console.log('Server error!');
+                localStorage.removeItem("token");
+                navigate("/login");
+            }
+        });
     };
 
   return (
@@ -227,19 +253,19 @@ export default function Order() {
       <hr />
 
       <div className='request-container-wrapper'>
-        <h3>My Pending Requests</h3>
+        <h3>My Requests</h3>
         <div className={`request-container ${requests.length===0? 'hidden': ''}`}>
             <table className='table table-hover table-sm'>
                 <thead>
                     <tr>
                         <th>Order Id</th>
                         <th>Owner Book Id</th>
-                        <th>Action</th>
+                        <th>Accept</th>
                         <th>Recipient Book ID</th>
                         <th>DeliveryMode</th>
                         <th>Status</th>
                         <th>Date</th>
-                        <th>Action</th>
+                        <th>Approve/Reject</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -273,21 +299,27 @@ export default function Order() {
                                 {item.createdDate}
                             </td>
                             <td>
-                                <p>
-                                <button type="button" className={`btn btn-outline-success`} 
-                                    onClick={() => handleApproveRequest(item.ownerBookID)}>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                                    </svg>
-                                    <span className="visually-hidden">Button</span>
-                                </button>
-                                <button type="button" className={`btn btn-outline-danger mx-1`} >
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
-                                    </svg>
-                                    <span className="visually-hidden">Button</span>
-                                </button>
-                                </p>
+                                {
+                                    item.orderStatus === 'AWAITING_OWNER_RESPONSE' ?
+                                        (
+                                            <p>
+                                                <button type="button" className={`btn btn-outline-success`} 
+                                                    onClick={() => handleOrderRequest(item.id, item.ownerBookID, 'accept', item.action)}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+                                                    </svg>
+                                                    <span className="visually-hidden">Button</span>
+                                                </button>
+                                                <button type="button" className={`btn btn-outline-danger mx-1`} 
+                                                    onClick={() => handleOrderRequest(item.id, item.ownerBookID, 'reject', item.action)}>
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" className="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                                                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z"/>
+                                                    </svg>
+                                                    <span className="visually-hidden">Button</span>
+                                                </button>
+                                            </p>
+                                        ) : ('No action required!')
+                                }
                             </td>
                             
                         </tr>
