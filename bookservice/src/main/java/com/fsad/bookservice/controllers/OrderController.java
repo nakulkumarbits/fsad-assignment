@@ -71,6 +71,25 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @GetMapping("/requests")
+  public ResponseEntity<OrderResponseDTO> getRequests(@RequestParam(name = "page", defaultValue = "0") int page,
+                                                      @RequestParam(name = "size", defaultValue = "10") int size,
+                                                      @RequestHeader("Authorization") String token) {
+    try {
+      ResponseEntity<Long> response = bookUtil.validateToken(token);
+      if (response.getStatusCode() == HttpStatus.OK) {
+        OrderResponseDTO serviceRequests = orderService.getRequests(response.getBody(), page, size);
+        return new ResponseEntity<>(serviceRequests, HttpStatus.OK);
+      }
+    } catch (Exception e) {
+      log.error("[getRequests] Failed to get orders", e);
+      if (e instanceof HttpClientErrorException) {
+        return new ResponseEntity<>(((HttpClientErrorException) e).getStatusCode());
+      }
+    }
+    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+  }
+
   @PostMapping("/exchange")
   public ResponseEntity<Void> exchangeBook(@RequestBody OrderDTO orderDTO,
                                            @RequestHeader("Authorization") String token) {

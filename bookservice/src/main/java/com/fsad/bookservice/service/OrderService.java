@@ -17,21 +17,32 @@ import java.util.List;
 
 @Service
 public class OrderService {
+
   @Autowired
   private OrderRepository orderRepository;
 
   public OrderResponseDTO getOrderSummary(Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     Page<Order> orderPage = orderRepository.findByRecipientID(userId, pageable);
+    return getOrderResponseDTO(orderPage);
+  }
+
+  public OrderResponseDTO getRequests(Long userId, int page, int size) {
+    Pageable pageable = PageRequest.of(page, size);
+    Page<Order> requestPage = orderRepository.findByOwnerID(userId, pageable);
+    return getOrderResponseDTO(requestPage);
+  }
+
+  private static OrderResponseDTO getOrderResponseDTO(Page<Order> page) {
     OrderResponseDTO orderResponseDTO = OrderResponseDTO.builder()
-        .page(orderPage.getNumber())
-        .size(orderPage.getSize())
-        .totalPages(orderPage.getTotalPages())
-        .totalElements(orderPage.getTotalElements())
+        .page(page.getNumber())
+        .size(page.getSize())
+        .totalPages(page.getTotalPages())
+        .totalElements(page.getTotalElements())
         .build();
-    if (orderPage.getTotalElements() > 0) {
+    if (page.getTotalElements() > 0) {
       List<OrderDTO> orderDTOS = new ArrayList<>();
-      orderPage.getContent().forEach(order -> orderDTOS.add(OrderConvertor.toDTO(order)));
+      page.getContent().forEach(order -> orderDTOS.add(OrderConvertor.toDTO(order)));
       orderResponseDTO.setOrderDTOS(orderDTOS);
     } else {
       orderResponseDTO.setOrderDTOS(Collections.emptyList());

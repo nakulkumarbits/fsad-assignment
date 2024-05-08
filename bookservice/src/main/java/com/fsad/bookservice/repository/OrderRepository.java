@@ -15,4 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
   Optional<Order> findByRecipientIDAndOwnerBookIDAndOrderStatusIn(Long recipientID, Long ownerBookID, List<OrderStatus> ALLOWED_STATUS_LIST);
 
   Page<Order> findByRecipientID(Long recipientID, Pageable pageable);
+
+  Page<Order> findByOwnerID(Long userID, Pageable pageable);
 }
