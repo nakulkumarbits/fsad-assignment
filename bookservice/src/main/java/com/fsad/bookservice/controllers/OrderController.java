@@ -2,6 +2,7 @@ package com.fsad.bookservice.controllers;
 
 import com.fsad.bookservice.dto.OrderDTO;
 import com.fsad.bookservice.dto.OrderResponseDTO;
+import com.fsad.bookservice.dto.OrderStateDTO;
 import com.fsad.bookservice.entities.Book;
 import com.fsad.bookservice.entities.Order;
 import com.fsad.bookservice.enums.DeliveryMode;
@@ -67,6 +68,16 @@ public class OrderController {
       if (e instanceof HttpClientErrorException) {
         return new ResponseEntity<>(((HttpClientErrorException) e).getStatusCode());
       }
+    }
+    return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+  }
+
+  @PatchMapping("/orders")
+  public ResponseEntity<Void> updateOrderState(@RequestBody @Valid OrderStateDTO orderStateDTO, @RequestHeader("Authorization") String token) {
+    ResponseEntity<Long> response = bookUtil.validateToken(token);
+    if (response.getStatusCode() == HttpStatus.OK) {
+      orderService.updateOrderState(orderStateDTO, response.getBody());
+      return new ResponseEntity<>(HttpStatus.OK);
     }
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
