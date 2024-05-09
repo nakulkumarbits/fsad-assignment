@@ -3,6 +3,8 @@ package com.fsad.bookservice.controllers;
 import com.fsad.bookservice.dto.SearchResponseDTO;
 import com.fsad.bookservice.service.SearchService;
 import com.fsad.bookservice.utils.BookUtil;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ public class SearchController {
   @Autowired
   private BookUtil bookUtil;
 
+  @Operation(summary = "Search a book using the criteria provided.")
   @CrossOrigin
   @GetMapping("/search")
   public ResponseEntity<SearchResponseDTO> getBooks(@RequestParam Map<String, String> allParams,

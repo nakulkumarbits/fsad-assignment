@@ -6,6 +6,7 @@ import com.fsad.bookservice.repository.BookRepository;
 import com.fsad.bookservice.utils.BookConvertor;
 import com.fsad.bookservice.utils.BookUtil;
 import com.fsad.bookservice.utils.Patcher;
+import io.swagger.v3.oas.annotations.Operation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,7 @@ public class BookController {
 
   private final Logger logger = LoggerFactory.getLogger(BookController.class);
 
+  @Operation(summary = "Add a book")
   @PostMapping("/books")
   public ResponseEntity<BookDTO> addBook(@RequestBody BookDTO bookDTO,
                                          @RequestHeader("Authorization") String token) {
@@ -56,6 +58,7 @@ public class BookController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
+  @Operation(summary = "Fetch all books for the logged in user.")
   @GetMapping("/books")
   public ResponseEntity<List<BookDTO>> getAllBooksForUser(@RequestHeader("Authorization") String token) {
 
@@ -69,6 +72,7 @@ public class BookController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @Operation(summary = "Update book details using bookId.")
   @PatchMapping("/books/{bookId}")
   public ResponseEntity<BookDTO> updateBook(@PathVariable("bookId") Long bookId,
                                             @RequestBody BookDTO bookDTO,
@@ -93,6 +97,7 @@ public class BookController {
     }
   }
 
+  @Operation(summary = "Remove book using bookId.")
   @DeleteMapping("/books/{bookId}")
   public ResponseEntity<Void> removeBook(@PathVariable("bookId") Long bookId,
                                          @RequestHeader("Authorization") String token) {
@@ -112,6 +117,7 @@ public class BookController {
     return new ResponseEntity<>(response.getStatusCode());
   }
 
+  @Operation(summary = "Fetch book using bookId.")
   @GetMapping("/books/{bookId}")
   public ResponseEntity<BookDTO> getBook(@PathVariable("bookId") Long bookId,
                                          @RequestHeader("Authorization") String token) {

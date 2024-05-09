@@ -5,6 +5,7 @@ import com.fsad.userservice.exceptions.UnauthorizedException;
 import com.fsad.userservice.service.AddressService;
 import com.fsad.userservice.service.TokenService;
 import io.micrometer.common.util.StringUtils;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +19,7 @@ public class AddressController {
   @Autowired
   private TokenService tokenService;
 
+  @Operation(summary = "Updates the address for logged in user.")
   @PatchMapping("/address/{addressId}")
   public ResponseEntity<AddressDTO> updateAddress(@PathVariable Long addressId,
                                                   @RequestBody AddressDTO addressDTO,

@@ -2,6 +2,7 @@ package com.fsad.userservice.controllers;
 
 import com.fsad.userservice.dto.LoginDTO;
 import com.fsad.userservice.service.UserService;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ public class LoginController {
   @Autowired
   private UserService userService;
 
+  @Operation(summary = "Login using username and password.")
   @CrossOrigin
   @PostMapping("/login")
   public ResponseEntity<String> login(@RequestBody @Valid LoginDTO loginDTO) {

@@ -3,6 +3,7 @@ package com.fsad.bookservice.controllers;
 import com.fsad.bookservice.dto.WishlistDTO;
 import com.fsad.bookservice.service.WishlistService;
 import com.fsad.bookservice.utils.BookUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,7 @@ public class WishlistController {
   @Autowired
   private WishlistService wishlistService;
 
+  @Operation(summary = "Fetch books which are in wishlist for the logged in user.")
   @GetMapping("/wishlist")
   public ResponseEntity<WishlistDTO> getBooksFromWishlist(@RequestParam(name = "page", defaultValue = "0") int page,
                                                           @RequestParam(name = "size", defaultValue = "10") int size,
@@ -40,7 +42,7 @@ public class WishlistController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
-  //  @CrossOrigin
+  @Operation(summary = "Add book in wishlist for the logged in user.")
   @PostMapping("/wishlist/{bookId}")
   public ResponseEntity<Void> addBookToWishlist(@PathVariable("bookId") Long bookId,
                                                 @RequestHeader("Authorization") String token) {
@@ -59,6 +61,7 @@ public class WishlistController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @Operation(summary = "Remove book from wishlist for the logged in user.")
   @DeleteMapping("/wishlist/{bookId}")
   public ResponseEntity<Void> removeBookFromWishlist(@PathVariable("bookId") Long bookId,
                                                      @RequestHeader("Authorization") String token) {

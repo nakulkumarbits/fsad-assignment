@@ -2,6 +2,7 @@ package com.fsad.userservice.controllers;
 
 import com.fsad.userservice.dto.TokenDTO;
 import com.fsad.userservice.service.TokenService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ public class TokenController {
   @Autowired
   private TokenService tokenService;
 
+  @Operation(summary = "Validates the token.")
   @PostMapping("/token/validate")
   public ResponseEntity<Object> validate(@RequestBody TokenDTO tokenDTO) {
     Long userID = tokenService.validate(tokenDTO.getToken());

@@ -13,6 +13,7 @@ import com.fsad.bookservice.service.OrderService;
 import com.fsad.bookservice.utils.BookUtil;
 import com.fsad.bookservice.utils.OrderConvertor;
 import com.fsad.bookservice.utils.Patcher;
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +54,7 @@ public class OrderController {
 
   private final List<OrderStatus> ALLOWED_STATUS_LIST = List.of(AWAITING_OWNER_RESPONSE, INITIATE_DELIVERY, DELIVERY_IN_TRANSIT);
 
+  @Operation(summary = "Fetch all orders for the logged in user.")
   @GetMapping("/orders")
   public ResponseEntity<OrderResponseDTO> getOrderSummary(@RequestParam(name = "page", defaultValue = "0") int page,
                                                           @RequestParam(name = "size", defaultValue = "10") int size,
@@ -72,6 +74,7 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @Operation(summary = "Update order state using orderId.")
   @PatchMapping("/orders")
   public ResponseEntity<Void> updateOrderState(@RequestBody @Valid OrderStateDTO orderStateDTO, @RequestHeader("Authorization") String token) {
     ResponseEntity<Long> response = bookUtil.validateToken(token);
@@ -82,6 +85,7 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @Operation(summary = "Fetch order requests for logged in user.")
   @GetMapping("/requests")
   public ResponseEntity<OrderResponseDTO> getRequests(@RequestParam(name = "page", defaultValue = "0") int page,
                                                       @RequestParam(name = "size", defaultValue = "10") int size,
@@ -101,6 +105,7 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
   }
 
+  @Operation(summary = "Book exchange request.")
   @PostMapping("/exchange")
   public ResponseEntity<Void> exchangeBook(@RequestBody OrderDTO orderDTO,
                                            @RequestHeader("Authorization") String token) {
@@ -148,6 +153,7 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
+  @Operation(summary = "Book lend request.")
   @PostMapping("/lend")
   public ResponseEntity<Void> lendBook(@RequestBody @Valid OrderDTO orderDTO,
                                        @RequestHeader("Authorization") String token) {
@@ -188,6 +194,7 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
+  @Operation(summary = "Accept or reject book exchange request.")
   @PatchMapping("/exchange/{orderID}/{action}")
   public ResponseEntity<Void> exchangeResponse(@PathVariable long orderID,
                                                @PathVariable String action,
@@ -233,6 +240,7 @@ public class OrderController {
     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
   }
 
+  @Operation(summary = "Accept or reject book lend request.")
   @PatchMapping("/lend/{orderID}/{action}")
   public ResponseEntity<Void> lendResponse(@PathVariable long orderID,
                                            @PathVariable String action,
