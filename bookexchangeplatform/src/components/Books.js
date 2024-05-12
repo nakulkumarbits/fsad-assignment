@@ -169,7 +169,7 @@ export default function Books(props) {
     setUpdateBookId(book[0].id);
     setUpdateTitle(book[0].title);
     setUpdateAuthor(book[0].author);
-    setupdateGenre(book[0].author);
+    setupdateGenre(book[0].genre);
     setupdateBookCondition(book[0].bookCondition);
     setUpdatePublisher(book[0].publisher);
   }
