@@ -55,7 +55,12 @@ export default function Wishlist(props) {
                 navigate("/login");
             } else {
                 console.log('wishlist : ', response);
-                setBooks(response.bookDTOs);
+                
+                if(response.bookDTOs == null) {
+                  setBooks([]);
+                } else {
+                  setBooks(response.bookDTOs);
+                }
                 setCurrentPage(response.page);
                 setNPages(response.totalPages);
                 setTotalElements(response.totalElements);           
@@ -134,7 +139,10 @@ export default function Wishlist(props) {
   return (
     <div className='container'>
       <h2>My Wishlist</h2>
-      <div className='wishlist-container'>
+      <div className={`no-wishlist-found-container ${books.length === 0 ? '' : 'hidden'}`}>
+        <h3>No Wishlist Exists!!</h3>
+      </div>
+      <div className={`wishlist-container ${books.length === 0 ? 'hidden' : ''}`}>
         <table className="table table-hover table-sm table-bordered">
             <thead>
                 <tr>
