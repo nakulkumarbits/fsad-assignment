@@ -224,7 +224,7 @@
 				"header": [
 					{
 						"key": "Authorization",
-						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiZWUwMWEyMDg5NDdhNDFlNzk1MzliZTE1NjEzNGY1YzYiLCJpYXQiOjE3MTUyNzkzMjYsImV4cCI6MTcxNTI3OTkyNn0.u28h6n45fT3OrmAOfEG8w8OsR7fuRAo-k_juMdFp19q1Pf9fzBpecR-XjNI3qylSudtJUpZVOYzTiiwt8O4lnw",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6IjE1N2ZkOTVjNGVlNjQ2MjNhNjQ2OWQ5MWE4ODc2NzllIiwiaWF0IjoxNzE1NDk2NzgyLCJleHAiOjE3MTU0OTczODJ9.HL_9OcztyOmE-sbQ4sdKjiuj3ORqcOKX01zSp9Bv7pQExF_nWr-TL-i4SBzR1MLwyYwCyMAdFdBHr4oVmTT-Qw",
 						"type": "text"
 					}
 				],
@@ -246,6 +246,154 @@
 							"key": "size",
 							"value": "5"
 						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/lend",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6Ijc5OTNkZTc1ZjM1MDRiYmQ4MGU3ZTYxMzdjMjNhOTA4IiwiaWF0IjoxNzE1NDk0ODA1LCJleHAiOjE3MTU0OTU0MDV9.B9Dz0nMYHmvcHWkHVm89iKjsvZOmMR_fKvbtJN19ERL6j4j-Mj3Rv-2aUZkeBk20RqhDStRCt8NAFjuGvB7rIQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"action\": \"LEND\", \n\"ownerBookID\": 20, \n\"duration\": \"10\", \n\"deliveryMode\": \"EXPRESS\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/lend",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"lend"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/exchange",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6IjIwMjNtdDkzMjAyQHdpbHAuYml0cy1waWxhbmkuYWMuaW4iLCJ1c2VybmFtZSI6Im5ha3Vsa3VtYXIiLCJpc3MiOiJVU0VSU0VSVklDRSIsImp0aSI6Ijc5OTNkZTc1ZjM1MDRiYmQ4MGU3ZTYxMzdjMjNhOTA4IiwiaWF0IjoxNzE1NDk0ODA1LCJleHAiOjE3MTU0OTU0MDV9.B9Dz0nMYHmvcHWkHVm89iKjsvZOmMR_fKvbtJN19ERL6j4j-Mj3Rv-2aUZkeBk20RqhDStRCt8NAFjuGvB7rIQ",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"action\": \"EXCHANGE\", \n\"ownerBookID\": \"21\", \n\"recipientBookID\": \"30\", \n\"deliveryMode\": \"EXPRESS\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9001/exchange",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"exchange"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/exchange/{orderID}/{action}",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiNzZkY2NjZjFkMTAzNDhmNDlkNDc4NWNiNThlNjM2MTUiLCJpYXQiOjE3MTU0OTU1OTIsImV4cCI6MTcxNTQ5NjE5Mn0.EL2dE-LklNK-RlPo2usotkVQQPLik4nyhqCuFXVHznNjhbpEi2MOecjBA8tdJLYglWQzWrfe3qlbssRXo0oh8w",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9001/exchange/7/accept",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"exchange",
+						"7",
+						"accept"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/lend/{orderID}/{action}",
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiNzZkY2NjZjFkMTAzNDhmNDlkNDc4NWNiNThlNjM2MTUiLCJpYXQiOjE3MTU0OTU1OTIsImV4cCI6MTcxNTQ5NjE5Mn0.EL2dE-LklNK-RlPo2usotkVQQPLik4nyhqCuFXVHznNjhbpEi2MOecjBA8tdJLYglWQzWrfe3qlbssRXo0oh8w",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9001/lend/5/reject",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"lend",
+						"5",
+						"reject"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "/books/{bookId}",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Authorization",
+						"value": "eyJhbGciOiJIUzUxMiJ9.eyJlbWFpbCI6ImFhIiwidXNlcm5hbWUiOiJhYSIsImlzcyI6IlVTRVJTRVJWSUNFIiwianRpIjoiMTg3YzJiZmUzMDZkNGM1NGE1YmFmNDA5MWU2NmU5YzMiLCJpYXQiOjE3MTU0OTYzMjAsImV4cCI6MTcxNTQ5NjkyMH0.0Mjdru3OOLx_KgSSZXe5TxtGjaJlR3uPCy-wjBQID3MX5Hf-MbL-I64PrQ9_QS84AzRBaS9u0v0bJtOBdGfe7w",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:9001/books/2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9001",
+					"path": [
+						"books",
+						"2"
 					]
 				}
 			},
