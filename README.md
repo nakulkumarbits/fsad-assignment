@@ -9,6 +9,6 @@ Detailed steps for execution are present in respective README for backend servic
 2. userservice - https://github.com/nakulkumarbits/fsad-assignment/blob/main/userservice/Readme.md
 3. bookservice - https://github.com/nakulkumarbits/fsad-assignment/blob/main/bookservice/Readme.md
 
-# Demonstration Video links
+# Demonstration Video folder link
 
-https://drive.google.com/file/d/12hFE-L1aYP6cOGm7_po2G2ZkU-A3myzE/view?usp=drive_link
+https://drive.google.com/drive/folders/1xXmyfZ3Wp7KhPO8mjEriTJunub3atSm1?usp=drive_link
