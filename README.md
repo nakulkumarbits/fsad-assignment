@@ -1,4 +1,4 @@
-# FSAD-Assignment
+# FSAD-Assignment - Group 29
 1. Frontend - bookexchangeplatform
 2. Backend - userservice and bookservice
 
